@@ -15,10 +15,13 @@ class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      name : '',
       email: '',
       password: '',
       userType: '',
       errMsg: '',
+      address:'',
+      zip:'',
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -39,8 +42,8 @@ class Signup extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { email, password, userType } = this.state;
-    Accounts.createUser({ email, password, profile: { userType } }, err => {
+    const { email, password, userType, address, zip, name } = this.state;
+    Accounts.createUser({ email, password, profile: { userType, address, zip, name } }, err => {
       if (err) {
         this.setState({ errMsg: err.reason });
         return console.log(err);
@@ -70,9 +73,22 @@ class Signup extends React.Component {
             <div className="card-body">
               <h4 className="card-title">Sign up</h4>
               <form onSubmit={this.handleSubmit}>
+
+                <div className="form-group">
+                  <label htmlFor="name">Full Name</label>
+                  <input
+                    id="name"
+                    type="name"
+                    className="form-control"
+                    name="name"
+                    value={this.state.name}
+                    onChange={e => this.setState({ name: e.target.value })}
+                    required
+                  />
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="email">E-Mail Address</label>
-
                   <input
                     id="email"
                     type="email"
@@ -98,10 +114,35 @@ class Signup extends React.Component {
                 </div>
 
                 <div className="form-group">
+                  <label htmlFor="address">Address</label>
+                  <input
+                    id="address"
+                    type="address"
+                    className="form-control"
+                    name="address"
+                    value={this.state.address}
+                    onChange={e => this.setState({ address: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="zip">Zip Code</label>
+                  <input
+                    id="zip"
+                    type="zip"
+                    className="form-control"
+                    name="zip"
+                    value={this.state.zip}
+                    onChange={e => this.setState({ zip: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
                   <label htmlFor="userType">Register As</label>
                   <select
                     id="userType"
-                    // type="checkbox"
                     className="form-control"
                     name="userType"
                     value={this.state.userType}
