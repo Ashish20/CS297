@@ -14,8 +14,15 @@ Accounts.onCreateUser((options, user) => {
 
   // Add userType info in user document
   console.log('inside onCreateUser');
-  const userDetails = { ...user, userType: options.profile.userType, 
-    address: options.profile.address, zip: options.profile.zip, name: options.profile.name };
+  const userDetails = {
+    ...user,
+    userType: options.profile.userType,
+    address: options.profile.address,
+    zip: options.profile.zip,
+    name: options.profile.name,
+    designation: options.profile.designation,
+    categories: options.profile.categories,
+  };
 
   return userDetails;
 });

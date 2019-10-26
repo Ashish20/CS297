@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { Roles } from 'meteor/alanning:roles';
+import { WithContext as ReactTags } from 'react-tag-input';
 
 // import components
 import Alert from '../../components/Alert';
@@ -15,15 +16,22 @@ class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name : '',
+      name: '',
       email: '',
       password: '',
       userType: '',
       errMsg: '',
-      address:'',
-      zip:'',
+      address: '',
+      zip: '',
+      designation: '',
+      categories: [
+        { id: 'electricity', text: 'Electricity' },
+        { id: 'water', text: 'Water' },
+      ],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleAddition = this.handleAddition.bind(this);
   }
 
   componentWillMount() {
@@ -42,13 +50,70 @@ class Signup extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { email, password, userType, address, zip, name } = this.state;
-    Accounts.createUser({ email, password, profile: { userType, address, zip, name } }, err => {
-      if (err) {
-        this.setState({ errMsg: err.reason });
-        return console.log(err);
+    const {
+      email,
+      password,
+      userType,
+      address,
+      zip,
+      name,
+      designation,
+      categories,
+    } = this.state;
+    Accounts.createUser(
+      {
+        email,
+        password,
+        profile: { userType, address, zip, name, designation, categories },
+      },
+      err => {
+        if (err) {
+          this.setState({ errMsg: err.reason });
+          return console.log(err);
+        }
       }
+    );
+  }
+
+  handleAddition(tag) {
+    this.setState(state => ({ categories: [...state.categories, tag] }));
+  }
+
+  handleDelete(i) {
+    const { categories } = this.state;
+    this.setState({
+      categories: categories.filter((tag, index) => index !== i),
     });
+  }
+
+  representativeFields() {
+    const categories = this.state;
+    return (
+      <React.Fragment>
+        <div className="form-group">
+          <label htmlFor="designation">Designation</label>
+          <input
+            id="designation"
+            type="text"
+            className="form-control"
+            name="designation"
+            value={this.state.designation}
+            onChange={e => this.setState({ designation: e.target.value })}
+            required
+          />
+        </div>
+
+        <div>
+          <ReactTags
+            categories={categories}
+            handleDelete={this.handleDelete}
+            handleAddition={this.handleAddition}
+            // handleDrag={this.handleDrag}
+            delimiters={delimiters}
+          />
+        </div>
+      </React.Fragment>
+    );
   }
 
   render() {
@@ -73,7 +138,6 @@ class Signup extends React.Component {
             <div className="card-body">
               <h4 className="card-title">Sign up</h4>
               <form onSubmit={this.handleSubmit}>
-
                 <div className="form-group">
                   <label htmlFor="name">Full Name</label>
                   <input
@@ -155,8 +219,10 @@ class Signup extends React.Component {
                     <option value="representative">Representative</option>
                     <option value="citizen">Citizen</option>
                   </select>
-                  {errMsg && <Alert errMsg={errMsg} />}
                 </div>
+
+                {this.state.userType == 'representative' &&
+                  this.representativeFields()}
 
                 <div className="form-group">
                   <label>
