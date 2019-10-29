@@ -34,7 +34,10 @@
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.0.1",
     "react-tag-input": "4.8.1",
+<<<<<<< HEAD
     "react-user-profile": "^1.0.3",
+=======
+>>>>>>> 941dd35f32060ce350fbbe1ed0c13bf9206087c2
     "recompose": "^0.30.0",
     "simpl-schema": "^1.5.5",
     "styled-components": "^4.4.1"
