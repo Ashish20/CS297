@@ -8,7 +8,7 @@ import MediaCard from './components/ProfilePage';
 // collection
 import Counters from '../../../api/counters/counters';
 
-import './Profile.scss';
+// import './Profile.scss';
 
 const styles = () => ({
   card: {
@@ -50,7 +50,7 @@ class Profile extends React.Component {
 
     return (
       <div className="container">
-        <MediaCard />;
+        <MediaCard />
       </div>
     );
   }
