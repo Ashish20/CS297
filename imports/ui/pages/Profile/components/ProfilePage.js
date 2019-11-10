@@ -19,7 +19,7 @@ export default function MediaCard() {
   const classes = useStyles();
   const userName = Meteor.user().name;
   const emailId = 'Email - ' + Meteor.user().emails[0].address;
-  const userType = 'User Type - ' + Meteor.user().userType;
+  const userType = Meteor.user().userType;
   const address =
     'Address - ' + Meteor.user().address + ', Zip - ' + Meteor.user().zip;
 
@@ -43,7 +43,7 @@ export default function MediaCard() {
           </Typography>
           {userType === 'Representative' && (
             <Typography variant="body2" color="textSecondary" component="p">
-              {userType}
+              User Type - {userType}
             </Typography>
           )}
         </CardContent>

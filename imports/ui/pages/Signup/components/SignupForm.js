@@ -16,12 +16,13 @@ import FormControl from '@material-ui/core/FormControl';
 import Chip from '@material-ui/core/Chip';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { NavLink } from 'react-router-dom';
+import Alert from '../../../components/Alert';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" href="">
         Politracker
       </Link>{' '}
       {new Date().getFullYear()}
@@ -56,15 +57,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const top10Categories = [
-  { name: 'Water' },
-  { name: 'Electricity' },
-  { name: 'Road' },
-  { name: 'University' },
-  { name: 'Traffic' },
-  { name: 'School' },
+  { id: 'water', name: 'Water' },
+  { id: 'electricity', name: 'Electricity' },
+  { id: 'road', name: 'Road' },
+  { id: 'university', name: 'University' },
+  { id: 'traffic', name: 'Traffic' },
+  { id: 'school', name: 'School' },
 ];
 
-function renderRepresentativeComponent({ designation, updateState }) {
+function renderRepresentativeComponent({ state, updateState }) {
   // const categories = this.state;
   return (
     <React.Fragment>
@@ -76,20 +77,18 @@ function renderRepresentativeComponent({ designation, updateState }) {
           id="designation"
           label="Designation"
           name="designation"
-          value={designation}
+          value={state.designation}
           onChange={e => updateState({ designation: e.target.value })}
         />
       </Grid>
+      {/* {console.log(state.categories[0].text)} */}
       <Grid item xs={12}>
         <Autocomplete
           multiple
           options={top10Categories}
           getOptionLabel={option => option.name}
-          defaultValue={[
-            top10Categories[0],
-            top10Categories[1],
-            top10Categories[2],
-          ]}
+          defaultValue={[state.categories[0], state.categories[1]]}
+          onChange={(event, value) => updateState({ categories: value })}
           renderTags={(value, { className, onDelete }) =>
             value.map((option, index) => (
               <Chip
@@ -215,7 +214,7 @@ export default function SignUp({ state, updateState, handleSubmit }) {
             </Grid>
 
             {isRepresentative &&
-              renderRepresentativeComponent(state.designation, updateState)}
+              renderRepresentativeComponent({ state, updateState })}
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -231,6 +230,7 @@ export default function SignUp({ state, updateState, handleSubmit }) {
               />
             </Grid>
           </Grid>
+          {state.errMsg && <Alert errMsg={state.errMsg} />}
           <Button
             type="submit"
             fullWidth

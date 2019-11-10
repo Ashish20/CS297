@@ -19,8 +19,8 @@ class Signup extends React.Component {
       zip: '',
       designation: '',
       categories: [
-        { id: 'electricity', text: 'Electricity' },
-        { id: 'water', text: 'Water' },
+        { id: 'electricity', name: 'Electricity' },
+        { id: 'water', name: 'Water' },
       ],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
