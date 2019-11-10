@@ -2,22 +2,22 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import MediaCard from './components/ProfilePage';
 
 // collection
 import Counters from '../../../api/counters/counters';
 
-// remote example (if using ddp)
-/*
-import Remote from '../../../api/remote/ddp';
-import Users from '../../../api/remote/users';
-*/
+// import './Profile.scss';
 
-// components
-import Modal, { Button } from '../../components/Modal/Modal';
-import AddCountButton from '../../components/Button';
-import Text from '../../components/Text';
-
-import './Profile.scss';
+const styles = () => ({
+  card: {
+    maxWidth: 345,
+  },
+  media: {
+    height: 140,
+  },
+});
 
 class Profile extends React.Component {
   componentWillMount() {
@@ -35,14 +35,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const {
-      loggedIn,
-      // remote example (if using ddp)
-      // usersReady,
-      // users,
-      countersReady,
-      counter,
-    } = this.props;
+    const { loggedIn } = this.props;
 
     // eslint-disable-line
     // remote example (if using ddp)
@@ -50,24 +43,14 @@ class Profile extends React.Component {
     console.log('usersReady', usersReady);
     console.log('users', users);
     */
+
     if (!loggedIn) {
       return null;
     }
+
     return (
-      <div className="profile-page">
-        <h1>Profile Page</h1>
-        <Button target="userId" type="primary" title="Click for User Info" />
-        {countersReady && (
-          <Modal
-            target="userId"
-            title="User Info"
-            body={Meteor.userId()}
-            counter={counter}
-          />
-        )}
-        <hr />
-        {countersReady && <Text count={counter.count} />}
-        <AddCountButton />
+      <div className="container">
+        <MediaCard />
       </div>
     );
   }
@@ -90,6 +73,7 @@ Profile.propTypes = {
   counter: PropTypes.shape({
     _id: PropTypes.string,
     count: PropTypes.number,
+    classes: PropTypes.object.isRequired,
   }),
 };
 
@@ -112,4 +96,4 @@ export default withTracker(() => {
     countersReady,
     counter,
   };
-})(Profile);
+})(withStyles(styles)(Profile));

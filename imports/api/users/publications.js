@@ -23,6 +23,9 @@ if (Meteor.isServer) {
             profile: 1,
             status: 1,
             name: 1,
+            address: 1,
+            zip: 1,
+            userType: 1,
           },
         }
       );
