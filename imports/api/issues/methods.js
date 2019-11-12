@@ -10,6 +10,7 @@ import { MethodHooks } from 'meteor/lacosta:method-hooks';
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin';
 import SimpleSchema from 'simpl-schema';
 import Issues from './issues';
+import { ISSUE_CATEGORIES } from '../../constants';
 
 /** **************** Helpers **************** */
 
@@ -57,15 +58,8 @@ export const issueCreate = new ValidatedMethod({
   validate: new SimpleSchema({
     category: {
       type: String,
-      allowedValues: [
-        'roads',
-        'water',
-        'electricity',
-        'traffic',
-        'school',
-        'university',
-      ],
       optional: false,
+      allowedValues: Object.keys(ISSUE_CATEGORIES),
     },
     title: {
       type: String,

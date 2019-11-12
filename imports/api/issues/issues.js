@@ -2,8 +2,7 @@
 
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
-import Users from '../users/users';
-
+import { ISSUE_STATE, ISSUE_CATEGORIES } from '../../constants';
 // define collection
 const Issues = new Meteor.Collection('issues');
 
@@ -14,14 +13,7 @@ const schema = new SimpleSchema({
   },
   category: {
     type: String,
-    allowedValues: [
-      'roads',
-      'water',
-      'electricity',
-      'traffic',
-      'school',
-      'university',
-    ],
+    allowedValues: Object.keys(ISSUE_CATEGORIES),
     optional: false,
   },
   title: {
@@ -74,9 +66,9 @@ const schema = new SimpleSchema({
   state: {
     type: String,
     optional: false,
-    allowedValues: ['backlog', 'todo', 'in-progress', 'done'],
+    allowedValues: Object.keys(ISSUE_STATE),
     autoValue() {
-      if (this.isInsert && !this.isSet) return 'backlog';
+      if (this.isInsert && !this.isSet) return 'BACKLOG';
     },
   },
   ownerName: {

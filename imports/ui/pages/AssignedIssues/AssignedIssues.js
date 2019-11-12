@@ -11,7 +11,7 @@ import {
   issueUpdate,
 } from '../../../api/issues/methods';
 import Issues from '../../../api/issues/issues';
-import RecipeReviewCard from '../../components/Issue/Issue';
+import { ISSUE_CATEGORIES } from '../../../constants';
 // import Users from '../../../api/users/users';
 
 const initialState = {
@@ -21,6 +21,7 @@ const initialState = {
   severity: 0,
   location: '',
   assignedTo: '',
+  category_options: Object.keys(ISSUE_CATEGORIES),
 };
 class AssignedIssues extends React.Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class AssignedIssues extends React.Component {
     this.state = initialState;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { loggedIn, history } = this.props;
     if (!loggedIn) {
       return history.push('/login');
@@ -59,6 +60,9 @@ class AssignedIssues extends React.Component {
             <div className="card-body">
               <h5 className="card-title">{issue.title}</h5>
               <p className="card-text">{issue.description}</p>
+              <p className="card-text" key={issue._id}>
+                {issue.createdOn.toDateString()}
+              </p>
               <button
                 type="button"
                 className="btn btn-danger"
@@ -80,6 +84,16 @@ class AssignedIssues extends React.Component {
     issueDelete.call({ _id: issueId });
   };
 
+  // renderCategoryOptions = () => {
+  //   const options = [];
+  //   for (let [key, value] of Object.entries(ISSUE_CATEGORIES)) {
+  //     options.push(<option value={value.name}> {value.name}</option>);
+  //   }
+  //   const OPTIONS = options.reduce((prev, curr) => prev + curr);
+  //   // console.log(options);
+  //   console.log(OPTIONS);
+  //   return OPTIONS;
+  // };
   // getAssignedTasks() {
   //   return Meteor.methods('getTasksAssignedTo', Meteor.userId())
   // }
@@ -93,6 +107,7 @@ class AssignedIssues extends React.Component {
       location,
       assignedTo,
     } = this.state;
+    console.log(typeof category, category);
     issueCreate.call({
       category,
       title,
@@ -187,12 +202,24 @@ class AssignedIssues extends React.Component {
                         <option value="" disabled selected>
                           Select Category
                         </option>
-                        <option value="roads">roads</option>
+                        {/* <option value="roads">roads</option>
                         <option value="water">water</option>
                         <option value="electricity">electricity</option>
                         <option value="traffic">traffic</option>
                         <option value="school">school</option>
                         <option value="university">university</option>
+                         */}
+                        {this.state.category_options.map(key => {
+                          const categoryProps = ISSUE_CATEGORIES[key];
+                          return (
+                            <option
+                              key={categoryProps.id}
+                              value={key.toString()}
+                            >
+                              {categoryProps.name}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
 
