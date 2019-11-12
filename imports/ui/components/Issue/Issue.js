@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -17,7 +18,8 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DiscreteSlider from '../Slider/Slider';
-// import ProgressIndicator from '../ProgressIndicator/ProgressIndicator';
+import ProgressIndicator from '../ProgressIndicator/ProgressIndicator';
+import { issueUpdateState, issueUpdate } from '../../../api/issues/methods';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -44,6 +46,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function onIssueStateChange({ event, issueId, newState }) {
+  event.preventDefault();
+  // try {
+  issueUpdateState.call({ issueId, newState });
+  // } catch (err) {
+  //   alert(err);
+  // }
+}
 export default function Issue({ issueId, issue, onChange, onDragStop }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -73,7 +83,12 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
         title={issue.ownerName}
         subheader={new Date(issue.createdOn).toDateString()}
       />
-      {/* <ProgressIndicator /> */}
+      <ProgressIndicator
+        issueId={issueId}
+        userTypeId={Meteor.user().userType}
+        issueStateId={issue.state}
+        handleStateChange={onIssueStateChange}
+      />
 
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">

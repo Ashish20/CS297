@@ -3,7 +3,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Issues from '../../../api/issues/issues';
-import RecipeReviewCard from '../../components/Issue/Issue';
+import Issue from '../../components/Issue/Issue';
 import { issueUpdate } from '../../../api/issues/methods';
 
 // eslint-disable-next-line react/prefer-stateless-function
@@ -37,7 +37,7 @@ class NewsFeed extends React.Component {
         {feedIssues.map(issue => (
           // eslint-disable-next-line no-unused-expressions
           <div key={issue._id} className="container">
-            <RecipeReviewCard
+            <Issue
               issueId={issue._id}
               issue={issue}
               onDragStop={this.onDragStop}

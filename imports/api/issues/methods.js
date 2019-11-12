@@ -10,7 +10,7 @@ import { MethodHooks } from 'meteor/lacosta:method-hooks';
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin';
 import SimpleSchema from 'simpl-schema';
 import Issues from './issues';
-import { ISSUE_CATEGORIES } from '../../constants';
+import { ISSUE_CATEGORIES, ISSUE_STATE, USER_TYPE } from '../../constants';
 
 /** **************** Helpers **************** */
 
@@ -133,6 +133,37 @@ export const issueUpdate = new ValidatedMethod({
   },
 });
 
+export const issueUpdateState = new ValidatedMethod({
+  name: 'issues.update.state',
+  mixins,
+  beforeHooks: [beforeHookExample],
+  afterHooks: [afterHookExample],
+  checkLoggedInError,
+  checkRoles: {
+    roles: ['admin', 'user'],
+    rolesError: {
+      error: 'not-allowed',
+      message: 'You are not allowed to call this method',
+    },
+  },
+  validate: new SimpleSchema({
+    issueId: { type: String },
+    newState: {
+      type: String,
+      optional: false,
+      allowedValues: Object.keys(ISSUE_STATE),
+    },
+  }).validator(),
+  run({ issueId, newState }) {
+    if (Meteor.isServer) {
+      if (Meteor.user().userType !== USER_TYPE.REPRESENTATIVE.id) {
+        throw new Meteor.Error('Only representatives allowed to update state');
+      }
+      return Issues.update({ _id: issueId }, { $set: { state: newState } });
+    }
+  },
+});
+
 export const issueDelete = new ValidatedMethod({
   name: 'issues.delete',
   mixins,
@@ -147,21 +178,21 @@ export const issueDelete = new ValidatedMethod({
     },
   },
   validate: new SimpleSchema({
-    _id: { type: String },
+    issueId: { type: String },
   }).validator(),
 
-  run(issueId) {
+  run({ issueId }) {
     if (Meteor.isServer) {
       // secure code - not available on the client
+      console.log('issue id owner ', Issues.findOne(issueId));
+      console.log(issueId);
+      if (!this.userId || Issues.findOne(issueId).owner !== this.userId) {
+        throw new Meteor.Error('not-authorized');
+      }
+      const removeStatus = Issues.remove(issueId);
+      console.log(removeStatus);
+      return removeStatus;
     }
-    if (!this.userId || Issues.findOne(issueId).owner !== this.userId) {
-      throw new Meteor.Error('not-authorized');
-    }
-    console.log('issue id owner ', Issues.findOne(issueId));
-    console.log(issueId);
-    const removeStatus = Issues.remove(issueId);
-    console.log(removeStatus);
-    return removeStatus;
     // call code on client and server (optimistic UI)
   },
 });

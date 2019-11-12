@@ -66,7 +66,7 @@ class AssignedIssues extends React.Component {
               <button
                 type="button"
                 className="btn btn-danger"
-                onClick={e => this.handleRemove(e)}
+                onClick={e => this.handleRemove(e, issue._id)}
               >
                 Delete
               </button>
@@ -81,7 +81,7 @@ class AssignedIssues extends React.Component {
   handleRemove = (event, issueId) => {
     event.preventDefault();
     // Meteor.call('issues.remove', issueId);
-    issueDelete.call({ _id: issueId });
+    issueDelete.call({ issueId });
   };
 
   // renderCategoryOptions = () => {
