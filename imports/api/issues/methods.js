@@ -10,7 +10,9 @@ import { MethodHooks } from 'meteor/lacosta:method-hooks';
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin';
 import SimpleSchema from 'simpl-schema';
 import Issues from './issues';
+// import Users from '../users';
 import { ISSUE_CATEGORIES, ISSUE_STATE, USER_TYPE } from '../../constants';
+import { useScrollTrigger } from '@material-ui/core';
 
 /** **************** Helpers **************** */
 
@@ -92,7 +94,8 @@ export const issueCreate = new ValidatedMethod({
       }
       console.log('running insert method');
       const ownerName = Meteor.user().name;
-      return Issues.insert({
+      const ownerId = Meteor.userId;
+      const issueId = Issues.insert({
         category,
         title,
         description,
@@ -101,6 +104,12 @@ export const issueCreate = new ValidatedMethod({
         assignedTo,
         ownerName,
       });
+      Meteor.users.update(
+        { _id: ownerId },
+        { $push: { ownedIssues: issueId } }
+      );
+      console.log(issueId);
+      return issueId;
     }
 
     // call code on client and server (optimistic UI)

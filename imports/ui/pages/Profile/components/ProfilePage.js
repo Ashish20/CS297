@@ -5,6 +5,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import { USER_TYPE } from '../../../../constants';
 
 const useStyles = makeStyles({
   card: {
@@ -42,7 +43,7 @@ export default function MediaCard() {
           <Typography variant="body2" color="textSecondary" component="p">
             {emailId}
           </Typography>
-          {userType === 'Representative' && (
+          {userType === USER_TYPE.REPRESENTATIVE.id && (
             <div className="rep-fields">
               <Typography variant="body2" color="textSecondary" component="p">
                 User Type - {userType}

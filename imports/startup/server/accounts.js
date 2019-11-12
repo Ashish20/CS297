@@ -22,6 +22,8 @@ Accounts.onCreateUser((options, user) => {
     name: options.profile.name,
     designation: options.profile.designation,
     categories: options.profile.categories,
+    assignedIssues: [],
+    ownedIssues: [],
   };
 
   return userDetails;

@@ -70,6 +70,7 @@ const top10Categories =
 
 function renderRepresentativeComponent({ state, updateState }) {
   // const categories = this.state;
+
   return (
     <React.Fragment>
       <Grid item xs={12}>
@@ -87,6 +88,7 @@ function renderRepresentativeComponent({ state, updateState }) {
       {/* {console.log(state.categories[0].text)} */}
       <Grid item xs={12}>
         <Autocomplete
+          required
           multiple
           options={top10Categories}
           getOptionLabel={option => option.name}
@@ -114,7 +116,7 @@ function renderRepresentativeComponent({ state, updateState }) {
               variant="outlined"
               placeholder="Categories"
               fullWidth
-              required
+              {...state.categories.length == 0 && { required: true }}
             />
           )}
         />
