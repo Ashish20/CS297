@@ -1,17 +1,17 @@
 const ISSUE_CATEGORIES = Object.freeze({
-  WATER: { id: 'water', name: 'Water' },
-  ELECTRICITY: { id: 'electricity', name: 'Electricity' },
-  ROAD: { id: 'road', name: 'Road' },
-  UNIVERSITY: { id: 'university', name: 'University' },
-  TRAFFIC: { id: 'traffic', name: 'Traffic' },
-  SCHOOL: { id: 'school', name: 'School' },
+  WATER: { id: 'WATER', name: 'Water' },
+  ELECTRICITY: { id: 'ELECTRICITY', name: 'Electricity' },
+  ROAD: { id: 'ROAD', name: 'Road' },
+  UNIVERSITY: { id: 'UNIVERSITY', name: 'University' },
+  TRAFFIC: { id: 'TRAFFIC', name: 'Traffic' },
+  SCHOOL: { id: 'SCHOOL', name: 'School' },
 });
 
 const ISSUE_STATE = Object.freeze({
-  BACKLOG: { id: 'backlog', name: 'Backlog' },
-  TODO: { id: 'todo', name: 'ToDo' },
-  INPROGRESS: { id: 'inprogress', name: 'In-Progress' },
-  DONE: { id: 'done', name: 'Done' },
+  BACKLOG: { id: 'BACKLOG', name: 'Backlog' },
+  TODO: { id: 'TODO', name: 'ToDo' },
+  INPROGRESS: { id: 'INPROGRESS', name: 'In-Progress' },
+  DONE: { id: 'DONE', name: 'Done' },
 });
 
 export { ISSUE_CATEGORIES, ISSUE_STATE };

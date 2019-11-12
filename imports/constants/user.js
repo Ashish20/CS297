@@ -1,12 +1,12 @@
 const USER_TYPE = Object.freeze({
   CITIZEN: {
-    id: 'citizen',
-    name: 'citizen',
+    id: 'CITIZEN',
+    name: 'Citizen',
     code: 'C',
   },
   REPRESENTATIVE: {
-    id: 'representative',
-    name: 'representative',
+    id: 'REPRESENTATIVE',
+    name: 'Representative',
     code: 'R',
   },
 });

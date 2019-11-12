@@ -17,6 +17,7 @@ import Chip from '@material-ui/core/Chip';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { NavLink } from 'react-router-dom';
 import Alert from '../../../components/Alert';
+import { ISSUE_CATEGORIES, USER_TYPE } from '../../../../constants';
 
 function Copyright() {
   return (
@@ -56,14 +57,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const top10Categories = [
-  { id: 'water', name: 'Water' },
-  { id: 'electricity', name: 'Electricity' },
-  { id: 'road', name: 'Road' },
-  { id: 'university', name: 'University' },
-  { id: 'traffic', name: 'Traffic' },
-  { id: 'school', name: 'School' },
-];
+const top10Categories =
+  // [
+  // { id: 'water', name: 'Water' },
+  // { id: 'electricity', name: 'Electricity' },
+  // { id: 'road', name: 'Road' },
+  // { id: 'university', name: 'University' },
+  // { id: 'traffic', name: 'Traffic' },
+  // { id: 'school', name: 'School' },
+  // ];
+  Object.values(ISSUE_CATEGORIES);
 
 function renderRepresentativeComponent({ state, updateState }) {
   // const categories = this.state;
@@ -87,13 +90,14 @@ function renderRepresentativeComponent({ state, updateState }) {
           multiple
           options={top10Categories}
           getOptionLabel={option => option.name}
-          defaultValue={[state.categories[0], state.categories[1]]}
-          onChange={(event, value) => updateState({ categories: value })}
+          onChange={(event, value) =>
+            updateState({ categories: value.map(val => val.id) })
+          }
           renderTags={(value, { className, onDelete }) =>
             value.map((option, index) => (
               <Chip
                 key={index}
-                disabled={index === 0}
+                // disabled={index === 0}
                 data-tag-index={index}
                 tabIndex={-1}
                 label={option.name}
@@ -110,6 +114,7 @@ function renderRepresentativeComponent({ state, updateState }) {
               variant="outlined"
               placeholder="Categories"
               fullWidth
+              required
             />
           )}
         />
@@ -199,7 +204,9 @@ export default function SignUp({ state, updateState, handleSubmit }) {
                   value={state.userType}
                   labelWidth={labelWidth}
                   onChange={e => {
-                    setIsRepresentative(e.target.value == 'Representative');
+                    setIsRepresentative(
+                      e.target.value === USER_TYPE.REPRESENTATIVE.id
+                    );
                     updateState({ userType: e.target.value });
                   }}
                   inputProps={{
@@ -207,8 +214,12 @@ export default function SignUp({ state, updateState, handleSubmit }) {
                     id: 'usertype-fields',
                   }}
                 >
-                  <option value={'Citizen'}>Citizen</option>
-                  <option value={'Representative'}>Representative</option>
+                  <option value={USER_TYPE.CITIZEN.id}>
+                    {USER_TYPE.CITIZEN.name}
+                  </option>
+                  <option value={USER_TYPE.REPRESENTATIVE.id}>
+                    {USER_TYPE.REPRESENTATIVE.name}
+                  </option>
                 </Select>
               </FormControl>
             </Grid>
