@@ -7,7 +7,7 @@
     "test-server": "TEST_CLIENT=0 SERVER_TEST_REPORTER=\"list\" meteor test --once --driver-package meteortesting:mocha --port 3100",
     "test-client": "NODE_ENV=UNIT_TESTING jest",
     "prettier": "prettier --write \"client/**/*.js\" \"imports/**/*.js\" \"server/**/*.js\" --single-quote true --trailing-comma es5",
-    "debug": "meteor run --inspect-brk=9229"
+    "debug": "meteor run --inspect-brk=9230"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./tests/enzyme-config.js",
