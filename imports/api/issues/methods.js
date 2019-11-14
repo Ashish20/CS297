@@ -3,16 +3,15 @@
  * Meteor methods
  */
 
-import { Meteor } from 'meteor/meteor';
-import { ValidatedMethod } from 'meteor/mdg:validated-method';
-import { LoggedInMixin } from 'meteor/tunifight:loggedin-mixin';
-import { MethodHooks } from 'meteor/lacosta:method-hooks';
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin';
+import { MethodHooks } from 'meteor/lacosta:method-hooks';
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
+import { Meteor } from 'meteor/meteor';
+import { LoggedInMixin } from 'meteor/tunifight:loggedin-mixin';
 import SimpleSchema from 'simpl-schema';
-import Issues from './issues';
 // import Users from '../users';
 import { ISSUE_CATEGORIES, ISSUE_STATE, USER_TYPE } from '../../constants';
-import { useScrollTrigger } from '@material-ui/core';
+import Issues from './issues';
 
 /** **************** Helpers **************** */
 
@@ -94,7 +93,7 @@ export const issueCreate = new ValidatedMethod({
       }
       console.log('running insert method');
       const ownerName = Meteor.user().name;
-      const ownerId = Meteor.userId;
+      const ownerId = this.userId;
       const issueId = Issues.insert({
         category,
         title,
@@ -169,6 +168,35 @@ export const issueUpdateState = new ValidatedMethod({
         throw new Meteor.Error('Only representatives allowed to update state');
       }
       return Issues.update({ _id: issueId }, { $set: { state: newState } });
+    }
+  },
+});
+
+export const issueToggleUpVote = new ValidatedMethod({
+  name: 'issues.update.upvotes',
+  mixins,
+  beforeHooks: [beforeHookExample],
+  afterHooks: [afterHookExample],
+  checkLoggedInError,
+  checkRoles: {
+    roles: ['admin', 'user'],
+    rolesError: {
+      error: 'not-allowed',
+      message: 'You are not allowed to call this method',
+    },
+  },
+  validate: new SimpleSchema({
+    issueId: { type: String },
+  }).validator(),
+  run({ issueId }) {
+    if (Meteor.isServer) {
+      const userId = this.userId;
+      const issue = Issues.findOne(issueId);
+      if (issue.upVoters && issue.upVoters.includes(userId)) {
+        Issues.update({ _id: issueId }, { $pull: { upVoters: userId } });
+      } else {
+        Issues.update({ _id: issueId }, { $addToSet: { upVoters: userId } });
+      }
     }
   },
 });

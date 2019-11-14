@@ -75,6 +75,12 @@ const schema = new SimpleSchema({
     type: String,
     optional: false,
   },
+  upVoters: {
+    // array of issue ids, we will also store userids in issue
+    type: Array,
+    optional: true,
+  },
+  'upVoters.$': String,
 });
 
 // attach schema
