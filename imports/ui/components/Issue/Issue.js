@@ -63,7 +63,7 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
   const [expanded, setExpanded] = React.useState(false);
 
   const [isUpvoted, setIsUpvote] = React.useState(
-    issue.upVoters && issue.upVoters.includes(Meteor.userId)
+    issue.upVoters && issue.upVoters.includes(Meteor.userId())
   );
 
   const upVotes = issue.upVoters ? issue.upVoters.length : 0;

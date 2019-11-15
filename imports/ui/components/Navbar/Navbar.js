@@ -34,7 +34,20 @@ const SearchBar = () => (
 
 const LoggedInNav = () => (
   <>
-    <SearchBar key="searchbar" />
+    <li>
+      <NavLink to="/assigned_issues">
+        <button type="button" className="dropdown-item">
+          Raise Issues
+        </button>
+      </NavLink>
+    </li>
+    <li>
+      <NavLink to="/newsfeed">
+        <button type="button" className="dropdown-item">
+          News
+        </button>
+      </NavLink>
+    </li>
     <li className="nav-item">
       <NavLink to="/profile">
         <button type="button" className="dropdown-item">
@@ -52,6 +65,7 @@ const LoggedInNav = () => (
         </button>
       </NavLink>
     </li>
+    <SearchBar key="searchbar" />
   </>
 );
 
@@ -79,8 +93,8 @@ const Navbar = ({ loggedIn }) => (
     <span className="navbar-brand" href="#">
       <NavLink to="/">PoliTracker</NavLink>
     </span>
-    {loggedIn && <NavLink to="/assigned_issues/">Assigned Issues</NavLink>}
-    {loggedIn && <NavLink to="/newsfeed/">News Feed</NavLink>}
+    {/* {loggedIn && <NavLink to="/assigned_issues/">Assigned Issues</NavLink>} */}
+    {/* {loggedIn && <NavLink to="/newsfeed/">News Feed</NavLink>} */}
     <button
       className="navbar-toggler"
       type="button"
