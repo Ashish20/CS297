@@ -25,4 +25,11 @@ if (Meteor.isServer) {
     }
     return Issues.find({ location: Meteor.users.findOne(this.userId).zip });
   });
+
+  Meteor.publish('issues.stateCount', function() {
+    if (this.userId) {
+      return Issues.find({ assignedTo: this.userId });
+    }
+    return this.ready();
+  });
 }
