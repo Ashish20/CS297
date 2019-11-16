@@ -19,7 +19,8 @@ import {
   issueUpdateState,
   issueToggleUpVote,
 } from '../../../api/issues/methods';
-import ProgressIndicator from '../ProgressIndicator/ProgressIndicator';
+// import ProgressIndicator from '../ProgressIndicator/ProgressIndicator';
+import StateIndicator from '../ProgressIndicator/StateIndicator';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -92,17 +93,16 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
         }
         action={
           <IconButton aria-label="settings">
-            <MoreVertIcon />
+            <StateIndicator
+              issueId={issueId}
+              userTypeId={Meteor.user().userType}
+              issueStateId={issue.state}
+              handleStateChange={onIssueStateChange}
+            />
           </IconButton>
         }
         title={issue.ownerName}
         subheader={new Date(issue.createdOn).toDateString()}
-      />
-      <ProgressIndicator
-        issueId={issueId}
-        userTypeId={Meteor.user().userType}
-        issueStateId={issue.state}
-        handleStateChange={onIssueStateChange}
       />
 
       <CardContent>
