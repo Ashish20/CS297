@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
 import './Navbar.scss';
+import { USER_TYPE } from '../../../constants';
 
 const PublicNav = () => [
   <li key="login" className="nav-item">
@@ -34,13 +35,15 @@ const SearchBar = () => (
 
 const LoggedInNav = () => (
   <>
-    <li>
-      <NavLink to="/assigned_issues">
-        <button type="button" className="dropdown-item">
-          Raise Issues
-        </button>
-      </NavLink>
-    </li>
+    {Meteor.user().userType === USER_TYPE.CITIZEN.id && (
+      <li>
+        <NavLink to="/assigned_issues">
+          <button type="button" className="dropdown-item">
+            Raise Issues
+          </button>
+        </NavLink>
+      </li>
+    )}
     <li>
       <NavLink to="/newsfeed">
         <button type="button" className="dropdown-item">

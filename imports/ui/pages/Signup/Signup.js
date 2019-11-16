@@ -5,6 +5,7 @@ import SignupForm from './components/SignupForm';
 
 // import styles
 import './Signup.scss';
+import { USER_TYPE } from '../../../constants';
 
 class Signup extends React.Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class Signup extends React.Component {
       name: '',
       email: '',
       password: '',
-      userType: '',
+      userType: USER_TYPE.CITIZEN.id,
       errMsg: '',
       address: '',
       zip: '',

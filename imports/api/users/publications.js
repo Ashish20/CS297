@@ -48,6 +48,8 @@ if (Meteor.isServer) {
             profile: 1,
             name: 1,
             designation: 1,
+            zip: 1,
+            userType: 1,
           },
         }
       );

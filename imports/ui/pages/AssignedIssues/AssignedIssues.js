@@ -356,11 +356,21 @@ export default withTracker(() => {
   const assignedIssues = Issues.find({ owner: Meteor.userId() }).fetch();
   const user = Meteor.user();
   // We need specific query because of multiple publications
-  const sameZipRep =
-    user &&
-    Meteor.users
+  // const sameZipRep =
+  //   user != null
+  //     ? Meteor.users
+  //         .find({ zip: user.zip, userType: USER_TYPE.REPRESENTATIVE.id })
+  //         .fetch()
+  //     : '';
+  let sameZipRep;
+  if (user != null) {
+    sameZipRep = Meteor.users
       .find({ zip: user.zip, userType: USER_TYPE.REPRESENTATIVE.id })
       .fetch();
+  } else {
+    sameZipRep = null;
+  }
+  // const sameZipRep = Meteor.users.find().fetch();
   // const issuesReady = issuesSub.ready() && !!assignedIssues;
   // const userReady = userSub.ready() && !!user;
   // const samZipRepReady = sameZipRepSub.ready() && !!sameZipRep;
