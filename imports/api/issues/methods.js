@@ -94,6 +94,7 @@ export const issueCreate = new ValidatedMethod({
       console.log('running insert method');
       const ownerName = Meteor.user().name;
       const ownerId = this.userId;
+      const upVoters = [];
       const issueId = Issues.insert({
         category,
         title,
@@ -102,6 +103,7 @@ export const issueCreate = new ValidatedMethod({
         location,
         assignedTo,
         ownerName,
+        upVoters,
       });
       Meteor.users.update(
         { _id: ownerId },
