@@ -5,19 +5,18 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
-import { red, blue } from '@material-ui/core/colors';
+import { blue, red } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import clsx from 'clsx';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import clsx from 'clsx';
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import {
-  issueUpdateState,
   issueToggleUpVote,
+  issueUpdateState,
 } from '../../../api/issues/methods';
 // import ProgressIndicator from '../ProgressIndicator/ProgressIndicator';
 import StateIndicator from '../ProgressIndicator/StateIndicator';
@@ -47,6 +46,9 @@ const useStyles = makeStyles(theme => ({
   },
   upVoted: {
     color: blue[500],
+  },
+  action: {
+    marginRight: '10px',
   },
 }));
 
@@ -86,20 +88,21 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
   return (
     <Card className={classes.card}>
       <CardHeader
+        className={classes.action}
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
             {issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <StateIndicator
-              issueId={issueId}
-              userTypeId={Meteor.user().userType}
-              issueStateId={issue.state}
-              handleStateChange={onIssueStateChange}
-            />
-          </IconButton>
+          // <IconButton aria-label="settings">
+          <StateIndicator
+            issueId={issueId}
+            userTypeId={Meteor.user().userType}
+            issueStateId={issue.state}
+            handleStateChange={onIssueStateChange}
+          />
+          // </IconButton>
         }
         title={issue.ownerName}
         subheader={new Date(issue.createdOn).toDateString()}
