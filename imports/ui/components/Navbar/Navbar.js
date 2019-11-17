@@ -47,7 +47,7 @@ const LoggedInNav = () => (
     <li>
       <NavLink to="/newsfeed">
         <button type="button" className="dropdown-item">
-          News
+          News Feed
         </button>
       </NavLink>
     </li>
