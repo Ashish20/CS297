@@ -30,6 +30,7 @@ if (Meteor.isServer) {
             designation: 1,
             assignedIssues: 1,
             ownedIssues: 1,
+            imageURL:1,
           },
         }
       );

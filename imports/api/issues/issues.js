@@ -91,6 +91,10 @@ const schema = new SimpleSchema({
   'comments.$.author.id': String,
   'comments.$.author.name': String,
   'comments.$.content': String,
+  imageURL: {
+    type:String,
+    optional: true,
+  },
 });
 
 // attach schema

@@ -56,36 +56,38 @@ export const issueCreate = new ValidatedMethod({
       message: 'You are not allowed to call this method',
     },
   },
-  validate: new SimpleSchema({
-    category: {
-      type: String,
-      optional: false,
-      allowedValues: Object.keys(ISSUE_CATEGORIES),
-    },
-    title: {
-      type: String,
-      optional: false,
-    },
-    description: {
-      type: String,
-      optional: false,
-    },
-    severity: {
-      type: Number,
-      optional: false,
-      // decimal: true,
-    },
-    // zip code
-    location: {
-      type: String,
-      optional: false,
-    },
-    assignedTo: {
-      type: String,
-      optional: false,
-    },
-  }).validator(),
-  run({ category, title, description, severity, location, assignedTo }) {
+  validate: null 
+  // new SimpleSchema({
+  //   category: {
+  //     type: String,
+  //     optional: false,
+  //     allowedValues: Object.keys(ISSUE_CATEGORIES),
+  //   },
+  //   title: {
+  //     type: String,
+  //     optional: false,
+  //   },
+  //   description: {
+  //     type: String,
+  //     optional: false,
+  //   },
+  //   severity: {
+  //     type: Number,
+  //     optional: false,
+  //     // decimal: true,
+  //   },
+  //   // zip code
+  //   location: {
+  //     type: String,
+  //     optional: false,
+  //   },
+  //   assignedTo: {
+  //     type: String,
+  //     optional: false,
+  //   },
+  // }).validator()
+  ,
+  run({ category, title, description, severity, location, assignedTo, imageURL }) {
     if (Meteor.isServer) {
       // secure code - not available on the client
       if (!this.userId) {
@@ -104,6 +106,7 @@ export const issueCreate = new ValidatedMethod({
         assignedTo,
         ownerName,
         upVoters,
+        imageURL,
       });
       Meteor.users.update(
         { _id: ownerId },

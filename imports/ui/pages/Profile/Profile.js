@@ -52,6 +52,7 @@ class Profile extends React.Component {
       <div className="container">
         <MediaCard />
       </div>
+      
     );
   }
 }
