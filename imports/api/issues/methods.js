@@ -203,6 +203,42 @@ export const issueToggleUpVote = new ValidatedMethod({
   },
 });
 
+export const issueAddComment = new ValidatedMethod({
+  name: 'issues.update.addComment',
+  mixins,
+  beforeHooks: [beforeHookExample],
+  afterHooks: [afterHookExample],
+  checkLoggedInError,
+  checkRoles: {
+    roles: ['admin', 'user'],
+    rolesError: {
+      error: 'not-allowed',
+      message: 'You are not allowed to call this method',
+    },
+  },
+  validate: new SimpleSchema({
+    issueId: { type: String },
+    comment: { type: String },
+  }).validator(),
+  run({ issueId, comment }) {
+    if (Meteor.isServer) {
+      const userId = this.userId;
+      const userName = Meteor.user().name;
+      const commentObject = {
+        author: {
+          id: userId,
+          name: userName,
+        },
+        content: comment,
+      };
+      return Issues.update(
+        { _id: issueId },
+        { $push: { comments: commentObject } }
+      );
+    }
+  },
+});
+
 export const issueDelete = new ValidatedMethod({
   name: 'issues.delete',
   mixins,

@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
+import { Collapse, Divider } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -18,6 +19,8 @@ import {
   issueToggleUpVote,
   issueUpdateState,
 } from '../../../api/issues/methods';
+import AddComment from '../Comment/AddComment';
+import Comments from '../Comment/Comments';
 // import ProgressIndicator from '../ProgressIndicator/ProgressIndicator';
 import StateIndicator from '../ProgressIndicator/StateIndicator';
 
@@ -138,6 +141,7 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
           <ArrowUpwardIcon />
           <Typography variant="body2">{upVotes}</Typography>
         </IconButton>
+
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -149,6 +153,14 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
           <ExpandMoreIcon />
         </IconButton>
       </CardActions>
+
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent style={{ padding: '0px' }}>
+          <Divider />
+          <Comments issue={issue} />
+          <AddComment issue={issue} />
+        </CardContent>
+      </Collapse>
     </Card>
   );
 }

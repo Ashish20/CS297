@@ -81,6 +81,16 @@ const schema = new SimpleSchema({
     optional: true,
   },
   'upVoters.$': String,
+  comments: {
+    type: Array,
+    optional: true,
+    defaultValue: [],
+  },
+  'comments.$': Object,
+  'comments.$.author': Object,
+  'comments.$.author.id': String,
+  'comments.$.author.name': String,
+  'comments.$.content': String,
 });
 
 // attach schema
