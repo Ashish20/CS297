@@ -33,14 +33,14 @@ function MediaCard({
   todoCount,
   inProgressCount,
   completedCount,
+  user,
 }) {
   const classes = useStyles();
-  const userName = Meteor.user().name;
-  const emailId = 'Email - ' + Meteor.user().emails[0].address;
-  const userType = Meteor.user().userType;
-  const address =
-    'Address - ' + Meteor.user().address + ', Zip - ' + Meteor.user().zip;
-  const designation = 'Designation - ' + Meteor.user().designation;
+  const userName = user.name;
+  const emailId = 'Email - ' + user.emails[0].address;
+  const userType = user.userType;
+  const address = 'Address - ' + user.address + ', Zip - ' + user.zip;
+  const designation = 'Designation - ' + user.designation;
 
   const data = [
     ['Task', 'Hours per Day'],
@@ -97,8 +97,13 @@ function MediaCard({
   );
 }
 
-export default withTracker(() => {
-  const subscriberHandles = [Meteor.subscribe('issues.stateCount')];
+export default withTracker(props => {
+  const subscriberHandles = [
+    Meteor.subscribe('issues.stateCount'),
+    Meteor.subscribe('userProfile'),
+  ];
+
+  console.log('Media card props', props);
 
   const propsReady = subscriberHandles.every(handle => handle.ready());
 
@@ -106,12 +111,16 @@ export default withTracker(() => {
   let todoCount = 0;
   let inProgressCount = 0;
   let completedCount = 0;
+  let user = null;
 
   if (propsReady) {
     backlogCount = Issues.find({ state: ISSUE_STATE.BACKLOG.id }).count();
     todoCount = Issues.find({ state: ISSUE_STATE.TODO.id }).count();
     inProgressCount = Issues.find({ state: ISSUE_STATE.INPROGRESS.id }).count();
     completedCount = Issues.find({ state: ISSUE_STATE.DONE.id }).count();
+    user = Meteor.users()
+      .find({ _id: props.userId })
+      .fetch();
   }
 
   return {
@@ -123,5 +132,6 @@ export default withTracker(() => {
     todoCount,
     inProgressCount,
     completedCount,
+    user,
   };
 })(MediaCard);

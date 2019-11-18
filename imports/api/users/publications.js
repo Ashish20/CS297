@@ -59,6 +59,26 @@ if (Meteor.isServer) {
     return this.ready();
   });
 
+  Meteor.publish('users.reps', function() {
+    if (this.userId) {
+      // if (user.friendIds) {
+      return Meteor.users.find(
+        { userType: USER_TYPE.REPRESENTATIVE.id },
+        {
+          fields: {
+            emails: 1,
+            profile: 1,
+            name: 1,
+            designation: 1,
+            zip: 1,
+            userType: 1,
+          },
+        }
+      );
+    }
+    return this.ready();
+  });
+
   // export const issueStateCount = new ValidatedMethod({
   //   name: 'issues.stateCount',
   //   mixins,
@@ -85,3 +105,26 @@ if (Meteor.isServer) {
   //   },
   // });
 }
+
+Meteor.publish('userProfile', function(userId) {
+  if (userId) {
+    return Meteor.users.find(
+      { _id: userId },
+      {
+        fields: {
+          emails: 1,
+          profile: 1,
+          status: 1,
+          name: 1,
+          address: 1,
+          zip: 1,
+          userType: 1,
+          designation: 1,
+          assignedIssues: 1,
+          ownedIssues: 1,
+        },
+      }
+    );
+  }
+  return this.ready();
+});

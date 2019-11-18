@@ -68,7 +68,7 @@ const schema = new SimpleSchema({
     optional: false,
     allowedValues: Object.keys(ISSUE_STATE),
     autoValue() {
-      if (this.isInsert && !this.isSet) return 'BACKLOG';
+      if (this.isInsert && !this.isSet) return ISSUE_STATE.BACKLOG.id;
     },
   },
   ownerName: {

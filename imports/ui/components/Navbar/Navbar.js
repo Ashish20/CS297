@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
+import Search from '../../pages/Search/Search';
 
 import './Navbar.scss';
 import { USER_TYPE } from '../../../constants';
@@ -68,7 +69,8 @@ const LoggedInNav = () => (
         </button>
       </NavLink>
     </li>
-    <SearchBar key="searchbar" />
+    {/* <SearchBar key="searchbar" /> */}
+    <Search />
   </>
 );
 

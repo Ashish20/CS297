@@ -50,7 +50,7 @@ class Profile extends React.Component {
 
     return (
       <div className="container">
-        <MediaCard />
+        <MediaCard userId={Meteor.userId()} />
       </div>
     );
   }
