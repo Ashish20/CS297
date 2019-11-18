@@ -40,12 +40,7 @@ class AutoComplete extends Component {
   }
 
   renderSuggestion(hit) {
-    // return <Highlight attribute="name" hit={hit} tagName="mark" />;
-    return (
-      <NavLink to="/profile">
-        <Highlight attribute="name" hit={hit} tagName="mark" />
-      </NavLink>
-    );
+    return <Highlight attribute="name" hit={hit} tagName="mark" />;
   }
 
   render() {

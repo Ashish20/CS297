@@ -4,7 +4,6 @@ import algoliasearch from 'algoliasearch';
 import {
   InstantSearch,
   Configure,
-  Hits,
   Highlight,
   connectSearchBox,
 } from 'react-instantsearch-dom';
@@ -13,7 +12,6 @@ import './Search.css';
 import { USER_TYPE } from '../../../constants';
 import { withTracker } from 'meteor/react-meteor-data';
 import Spinner from '../../components/Spinner';
-import { NavLink } from 'react-router-dom';
 
 const VirtalSearchBox = connectSearchBox(() => null);
 
@@ -26,29 +24,26 @@ const index = client.initIndex('rep-profiles');
 class Search extends Component {
   state = {
     query: '',
-    repId: '',
   };
 
   onSuggestionSelected = (_, { suggestion }) => {
     this.setState({
       query: suggestion.name,
-      repId: suggestion.objectID,
     });
+    this.props.history.push('/profile/' + suggestion.objectID);
   };
 
   onSuggestionCleared = () => {
     this.setState({
       query: '',
-      repId: '',
     });
   };
 
   render() {
-    const { query, repId } = this.state;
+    const { query } = this.state;
     const { propsReady, reps } = this.props;
 
     if (propsReady) {
-      console.log('Reps ' + reps);
       const fetchDataFromDatabase = () => {
         const actors = reps.map(rep => {
           return {
@@ -64,7 +59,6 @@ class Search extends Component {
       index.addObjects(records);
     }
 
-    console.log('Selected issue ' + query + repId);
     return !propsReady ? (
       <Spinner />
     ) : (
@@ -78,7 +72,6 @@ class Search extends Component {
         </InstantSearch>
         <InstantSearch indexName="rep-profiles" searchClient={client}>
           <VirtalSearchBox defaultRefinement={query} />
-          {/* <Hits hitComponent={Hit} /> */}
         </InstantSearch>
       </div>
     );
@@ -97,21 +90,20 @@ Hit.propTypes = {
   hit: PropTypes.object.isRequired,
 };
 
+Search.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
 export default withTracker(() => {
   const subscriberHandles = [Meteor.subscribe('users.reps')];
   const propsReady = subscriberHandles.every(handle => handle.ready());
-
-  console.log('Props ready for Search', propsReady);
   let reps = null;
   if (propsReady) {
     reps = Meteor.users.find({ userType: USER_TYPE.REPRESENTATIVE.id }).fetch();
-    console.log('Reps from fetch ', reps);
   }
-
   return {
-    // remote example (if using ddp)
-    // usersReady,
-    // users,
     propsReady,
     reps,
   };

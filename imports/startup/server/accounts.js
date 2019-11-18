@@ -24,6 +24,7 @@ Accounts.onCreateUser((options, user) => {
     categories: options.profile.categories,
     assignedIssues: [],
     ownedIssues: [],
+    imageURL: options.profile.imageURL,
   };
 
   return userDetails;

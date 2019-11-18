@@ -1,12 +1,11 @@
+import { List, ListItem } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grid from '@material-ui/core/Grid';
-import Grow from '@material-ui/core/Grow';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Popper from '@material-ui/core/Popper';
 import { withStyles } from '@material-ui/core/styles';
-import { List, ListItem } from '@material-ui/core';
 import React from 'react';
 import { ISSUE_STATE, USER_TYPE } from '../../../constants';
 
@@ -114,7 +113,6 @@ export default function SplitButton({
         </ButtonGroup> */}
         <List>
           <ListItem
-            style={{ padding: '0' }}
             onClick={
               userType === USER_TYPE.REPRESENTATIVE ? handleToggle : undefined
             }
@@ -132,63 +130,53 @@ export default function SplitButton({
           transition
           disablePortal
         >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin:
-                  placement === 'bottom' ? 'center top' : 'center bottom',
-              }}
-            >
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id="split-button-menu">
-                  <MenuItem
-                    key={ISSUE_STATE.BACKLOG.id}
-                    // disabled={index === 2}
-                    // selected={index === selectedIndex}
-                    onClick={event =>
-                      handleMenuItemClick(event, ISSUE_STATE.BACKLOG.id)
-                    }
-                  >
-                    <BacklogChip label={ISSUE_STATE.BACKLOG.id} />
-                  </MenuItem>
+          <ClickAwayListener onClickAway={handleClose}>
+            <MenuList id="split-button-menu">
+              <MenuItem
+                key={ISSUE_STATE.BACKLOG.id}
+                // disabled={index === 2}
+                // selected={index === selectedIndex}
+                onClick={event =>
+                  handleMenuItemClick(event, ISSUE_STATE.BACKLOG.id)
+                }
+              >
+                <BacklogChip label={ISSUE_STATE.BACKLOG.id} />
+              </MenuItem>
 
-                  <MenuItem
-                    key={ISSUE_STATE.TODO.id}
-                    // disabled={index === 2}
-                    // selected={index === selectedIndex}
-                    onClick={event =>
-                      handleMenuItemClick(event, ISSUE_STATE.TODO.id)
-                    }
-                  >
-                    <TodoChip label={ISSUE_STATE.TODO.id} />
-                  </MenuItem>
+              <MenuItem
+                key={ISSUE_STATE.TODO.id}
+                // disabled={index === 2}
+                // selected={index === selectedIndex}
+                onClick={event =>
+                  handleMenuItemClick(event, ISSUE_STATE.TODO.id)
+                }
+              >
+                <TodoChip label={ISSUE_STATE.TODO.id} />
+              </MenuItem>
 
-                  <MenuItem
-                    key={ISSUE_STATE.INPROGRESS.id}
-                    // disabled={index === 2}
-                    // selected={index === selectedIndex}
-                    onClick={event =>
-                      handleMenuItemClick(event, ISSUE_STATE.INPROGRESS.id)
-                    }
-                  >
-                    <InProgressChip label={ISSUE_STATE.INPROGRESS.id} />
-                  </MenuItem>
+              <MenuItem
+                key={ISSUE_STATE.INPROGRESS.id}
+                // disabled={index === 2}
+                // selected={index === selectedIndex}
+                onClick={event =>
+                  handleMenuItemClick(event, ISSUE_STATE.INPROGRESS.id)
+                }
+              >
+                <InProgressChip label={ISSUE_STATE.INPROGRESS.id} />
+              </MenuItem>
 
-                  <MenuItem
-                    key={ISSUE_STATE.DONE.id}
-                    // disabled={index === 2}
-                    // selected={index === selectedIndex}
-                    onClick={event =>
-                      handleMenuItemClick(event, ISSUE_STATE.DONE.id)
-                    }
-                  >
-                    <DoneChip label={ISSUE_STATE.DONE.id} />
-                  </MenuItem>
-                </MenuList>
-              </ClickAwayListener>
-            </Grow>
-          )}
+              <MenuItem
+                key={ISSUE_STATE.DONE.id}
+                // disabled={index === 2}
+                // selected={index === selectedIndex}
+                onClick={event =>
+                  handleMenuItemClick(event, ISSUE_STATE.DONE.id)
+                }
+              >
+                <DoneChip label={ISSUE_STATE.DONE.id} />
+              </MenuItem>
+            </MenuList>
+          </ClickAwayListener>
         </Popper>
       </Grid>
     </Grid>

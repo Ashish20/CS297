@@ -18,6 +18,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { NavLink } from 'react-router-dom';
 import Alert from '../../../components/Alert';
 import { ISSUE_CATEGORIES, USER_TYPE } from '../../../../constants';
+import FileUpload from '../../../components/FileUpload/FileUpload'
+const debug = require('debug')('demo:file');
 
 function Copyright() {
   return (
@@ -125,6 +127,7 @@ function renderRepresentativeComponent({ state, updateState }) {
   );
 }
 
+
 export default function SignUp({ state, updateState, handleSubmit }) {
   const classes = useStyles();
   const inputLabel = React.useRef(null);
@@ -133,7 +136,10 @@ export default function SignUp({ state, updateState, handleSubmit }) {
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
-
+  
+  fileURL = (url) => {
+    updateState({imageURL : url});
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -243,6 +249,15 @@ export default function SignUp({ state, updateState, handleSubmit }) {
               />
             </Grid>
           </Grid>
+
+
+          <p>Upload Profile Photo:</p>
+          <FileUpload fileURL={fileURL} 
+          // updateState={updateState}
+          />
+
+
+
           {state.errMsg && <Alert errMsg={state.errMsg} />}
           <Button
             type="submit"

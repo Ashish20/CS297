@@ -50,7 +50,13 @@ class Profile extends React.Component {
 
     return (
       <div className="container">
-        <MediaCard userId={Meteor.userId()} />
+        <MediaCard
+          userId={
+            !this.props.match.params._id
+              ? Meteor.userId()
+              : this.props.match.params._id
+          }
+        />
       </div>
     );
   }

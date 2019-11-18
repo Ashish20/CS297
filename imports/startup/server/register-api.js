@@ -14,3 +14,7 @@ import '../../api/counters/publications.js';
 // import another api
 import '../../api/issues/methods.js';
 import '../../api/issues/publications.js';
+
+
+// import another api
+import '../../api/UserFiles/publications.js';

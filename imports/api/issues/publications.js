@@ -28,9 +28,9 @@ if (Meteor.isServer) {
     });
   });
 
-  Meteor.publish('issues.stateCount', function() {
-    if (this.userId) {
-      return Issues.find({ assignedTo: this.userId });
+  Meteor.publish('issues.stateCount', function(userId) {
+    if (userId) {
+      return Issues.find({ assignedTo: userId });
     }
     return this.ready();
   });

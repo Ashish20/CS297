@@ -34,7 +34,7 @@ const SearchBar = () => (
   </form>
 );
 
-const LoggedInNav = () => (
+const LoggedInNav = props => (
   <>
     {Meteor.user().userType === USER_TYPE.CITIZEN.id && (
       <li>
@@ -70,7 +70,7 @@ const LoggedInNav = () => (
       </NavLink>
     </li>
     {/* <SearchBar key="searchbar" /> */}
-    <Search />
+    <Search {...props} />
   </>
 );
 
@@ -92,35 +92,41 @@ Status.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
 };
 
-const Navbar = ({ loggedIn }) => (
-  <nav className="navbar navbar-expand-lg navbar-light bg-light">
-    <Status loggedIn={loggedIn} />
-    <span className="navbar-brand" href="#">
-      <NavLink to="/">PoliTracker</NavLink>
-    </span>
-    {/* {loggedIn && <NavLink to="/assigned_issues/">Assigned Issues</NavLink>} */}
-    {/* {loggedIn && <NavLink to="/newsfeed/">News Feed</NavLink>} */}
-    <button
-      className="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span className="navbar-toggler-icon" />
-    </button>
-    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul className="navbar-nav ml-auto">
-        {loggedIn ? <LoggedInNav /> : <PublicNav />}
-      </ul>
-    </div>
-  </nav>
-);
+const Navbar = props => {
+  const { loggedIn } = props;
+  return (
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <Status loggedIn={loggedIn} />
+      <span className="navbar-brand" href="#">
+        <NavLink to="/">PoliTracker</NavLink>
+      </span>
+      {/* {loggedIn && <NavLink to="/assigned_issues/">Assigned Issues</NavLink>} */}
+      {/* {loggedIn && <NavLink to="/newsfeed/">News Feed</NavLink>} */}
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon" />
+      </button>
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul className="navbar-nav ml-auto">
+          {loggedIn ? <LoggedInNav {...props} /> : <PublicNav />}
+        </ul>
+      </div>
+    </nav>
+  );
+};
 
 Navbar.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default Navbar;

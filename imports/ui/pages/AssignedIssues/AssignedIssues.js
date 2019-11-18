@@ -6,6 +6,8 @@ import Spinner from '../../components/Spinner';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { USER_TYPE } from '../../../constants';
+import UserFiles from '../../../api/UserFiles/userFiles'
+
 
 import './AssignedIssues.scss';
 // import { issueInsert } from '../../../api/issues/issues.js';
@@ -16,6 +18,8 @@ import {
 } from '../../../api/issues/methods';
 import Issues from '../../../api/issues/issues';
 import { ISSUE_CATEGORIES } from '../../../constants';
+import FileUpload from '../../components/FileUpload/FileUpload'
+const debug = require('debug')('demo:file');
 // import Users from '../../../api/users/users';
 
 class AssignedIssues extends React.Component {
@@ -31,6 +35,10 @@ class AssignedIssues extends React.Component {
       assignedTo: '',
       category_options: Object.keys(ISSUE_CATEGORIES),
       assignedRepList: [],
+      imageURL : '',
+      uploading: [],
+      progress: 0,
+      inProgress: false
     };
     this.state = this.initialState;
   }
@@ -81,6 +89,9 @@ class AssignedIssues extends React.Component {
   };
 
   renderIssues = () => {
+
+    let link = UserFiles.findOne({_id: this.state.imageURL}, {_id:0, path:1});
+
     const { assignedIssues } = this.props;
     const listOfIssues = assignedIssues.map(issue => (
       <div key={issue._id} className="container">
@@ -90,6 +101,7 @@ class AssignedIssues extends React.Component {
             <div className="card-body">
               <h5 className="card-title">{issue.title}</h5>
               <p className="card-text">{issue.description}</p>
+              <div> <img src = {link} /> </div>
               <p className="card-text" key={issue._id}>
                 {issue.createdOn.toDateString()}
               </p>
@@ -136,6 +148,7 @@ class AssignedIssues extends React.Component {
       severity,
       // location,
       assignedTo,
+      imageURL,
     } = this.state;
     console.log(typeof category, category);
     issueCreate.call({
@@ -145,6 +158,7 @@ class AssignedIssues extends React.Component {
       severity,
       location: this.props.user.zip,
       assignedTo,
+      imageURL,
     });
     this.reset();
   };
@@ -152,6 +166,13 @@ class AssignedIssues extends React.Component {
   reset() {
     this.setState(this.initialState);
   }
+
+  fileURL = (url) => {
+    this.setState({imageURL : url});
+  }
+
+  // updateState = (newstate) => {
+  // }
 
   render() {
     const { assignedIssues, propsReady, user } = this.props;
@@ -293,6 +314,10 @@ class AssignedIssues extends React.Component {
                           }
                         />
                       </div>
+                      <p>Upload Issue Image: </p>
+                      <FileUpload fileURL = {this.fileURL}
+                                  // updateState = {this.updateState}
+                      />
 
                       <div className="form-group no-margin">
                         <button

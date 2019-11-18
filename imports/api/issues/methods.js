@@ -56,36 +56,38 @@ export const issueCreate = new ValidatedMethod({
       message: 'You are not allowed to call this method',
     },
   },
-  validate: new SimpleSchema({
-    category: {
-      type: String,
-      optional: false,
-      allowedValues: Object.keys(ISSUE_CATEGORIES),
-    },
-    title: {
-      type: String,
-      optional: false,
-    },
-    description: {
-      type: String,
-      optional: false,
-    },
-    severity: {
-      type: Number,
-      optional: false,
-      // decimal: true,
-    },
-    // zip code
-    location: {
-      type: String,
-      optional: false,
-    },
-    assignedTo: {
-      type: String,
-      optional: false,
-    },
-  }).validator(),
-  run({ category, title, description, severity, location, assignedTo }) {
+  validate: null 
+  // new SimpleSchema({
+  //   category: {
+  //     type: String,
+  //     optional: false,
+  //     allowedValues: Object.keys(ISSUE_CATEGORIES),
+  //   },
+  //   title: {
+  //     type: String,
+  //     optional: false,
+  //   },
+  //   description: {
+  //     type: String,
+  //     optional: false,
+  //   },
+  //   severity: {
+  //     type: Number,
+  //     optional: false,
+  //     // decimal: true,
+  //   },
+  //   // zip code
+  //   location: {
+  //     type: String,
+  //     optional: false,
+  //   },
+  //   assignedTo: {
+  //     type: String,
+  //     optional: false,
+  //   },
+  // }).validator()
+  ,
+  run({ category, title, description, severity, location, assignedTo, imageURL }) {
     if (Meteor.isServer) {
       // secure code - not available on the client
       if (!this.userId) {
@@ -104,6 +106,7 @@ export const issueCreate = new ValidatedMethod({
         assignedTo,
         ownerName,
         upVoters,
+        imageURL,
       });
       Meteor.users.update(
         { _id: ownerId },
@@ -199,6 +202,42 @@ export const issueToggleUpVote = new ValidatedMethod({
       } else {
         Issues.update({ _id: issueId }, { $addToSet: { upVoters: userId } });
       }
+    }
+  },
+});
+
+export const issueAddComment = new ValidatedMethod({
+  name: 'issues.update.addComment',
+  mixins,
+  beforeHooks: [beforeHookExample],
+  afterHooks: [afterHookExample],
+  checkLoggedInError,
+  checkRoles: {
+    roles: ['admin', 'user'],
+    rolesError: {
+      error: 'not-allowed',
+      message: 'You are not allowed to call this method',
+    },
+  },
+  validate: new SimpleSchema({
+    issueId: { type: String },
+    comment: { type: String },
+  }).validator(),
+  run({ issueId, comment }) {
+    if (Meteor.isServer) {
+      const userId = this.userId;
+      const userName = Meteor.user().name;
+      const commentObject = {
+        author: {
+          id: userId,
+          name: userName,
+        },
+        content: comment,
+      };
+      return Issues.update(
+        { _id: issueId },
+        { $push: { comments: commentObject } }
+      );
     }
   },
 });

@@ -1,26 +1,31 @@
 /* eslint-disable react/jsx-wrap-multilines */
+import { Collapse, Divider } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
-import { red, blue } from '@material-ui/core/colors';
+import { blue, red } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import clsx from 'clsx';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import clsx from 'clsx';
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import { withTracker } from 'meteor/react-meteor-data';
 import {
-  issueUpdateState,
   issueToggleUpVote,
+  issueUpdateState,
 } from '../../../api/issues/methods';
+import AddComment from '../Comment/AddComment';
+import Comments from '../Comment/Comments';
 // import ProgressIndicator from '../ProgressIndicator/ProgressIndicator';
 import StateIndicator from '../ProgressIndicator/StateIndicator';
+import Issues from '../../../api/issues/issues';
+import UserFiles from '../../../api/UserFiles/userFiles'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -48,6 +53,9 @@ const useStyles = makeStyles(theme => ({
   upVoted: {
     color: blue[500],
   },
+  action: {
+    marginRight: '10px',
+  },
 }));
 
 function onIssueStateChange({ event, issueId, newState }) {
@@ -59,10 +67,12 @@ function onIssueStateChange({ event, issueId, newState }) {
   // }
 }
 
-export default function Issue({ issueId, issue, onChange, onDragStop }) {
+
+function Issue({ imagePath, proPicPath, issueId, issue, onDragStop, onChange }) {
+
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
+  
   const [isUpvoted, setIsUpvote] = React.useState(
     issue.upVoters && issue.upVoters.includes(Meteor.userId())
   );
@@ -86,20 +96,22 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
   return (
     <Card className={classes.card}>
       <CardHeader
+        className={classes.action}
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            {issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
+            {/* {issue.ownerName ? issue.ownerName.substring(0, 1) : ''} */}
+            <img className = "avatar" src = {proPicPath}/>
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <StateIndicator
-              issueId={issueId}
-              userTypeId={Meteor.user().userType}
-              issueStateId={issue.state}
-              handleStateChange={onIssueStateChange}
-            />
-          </IconButton>
+          // <IconButton aria-label="settings">
+          <StateIndicator
+            issueId={issueId}
+            userTypeId={Meteor.user().userType}
+            issueStateId={issue.state}
+            handleStateChange={onIssueStateChange}
+          />
+          // </IconButton>
         }
         title={issue.ownerName}
         subheader={new Date(issue.createdOn).toDateString()}
@@ -112,6 +124,9 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
       </CardContent>
       <CardContent>
         <Typography>{issue.description}</Typography>
+      </CardContent>
+      <CardContent>
+        <img className = "image" src = {imagePath}/>
       </CardContent>
       {issue.image && (
         <CardMedia
@@ -135,6 +150,7 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
           <ArrowUpwardIcon />
           <Typography variant="body2">{upVotes}</Typography>
         </IconButton>
+
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -146,6 +162,68 @@ export default function Issue({ issueId, issue, onChange, onDragStop }) {
           <ExpandMoreIcon />
         </IconButton>
       </CardActions>
+
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent style={{ padding: '0px' }}>
+          <Divider />
+          <Comments issue={issue} />
+          <AddComment issue={issue} />
+        </CardContent>
+      </Collapse>
     </Card>
   );
+  // }
 }
+
+// Tracker.autorun(() => {
+//   Meteor.subscribe('user');
+//   Meteor.subscribe('files.all');
+//   Meteor.subscribe('issues.samezip')
+// }
+// );
+
+export default withTracker(props => {
+  const subscriberHandles = [ Meteor.subscribe('user'), Meteor.subscribe('files.all')];
+  const propsReady = subscriberHandles.every(handle => handle.ready());
+  console.log("In Withtrackerrrrrrrrrrrrrrr");
+
+  let image_Id = '';
+  let issuedoc = '';
+  let imagePath = '';
+  let proPic_Id = '';
+  let proPicDoc = '';
+  let proPicPath = '';
+  let issueId = props.issueId;
+  let issue = props.issue;
+  let onDragStop = props.onDragStop;
+  let onChange = props.onChange;
+
+  if (propsReady) {
+  // Issue Image
+  image_Id = props.issue.imageURL;
+  issuedoc = UserFiles.findOne({_id : image_Id});
+  imagePath = issuedoc.link();  
+
+  console.log(image_Id);
+  console.log(issuedoc);
+  console.log(imagePath);
+
+  // User Image
+  proPic_Id = Meteor.user().imageURL;
+  proPicDoc = UserFiles.findOne({_id : proPic_Id});
+  proPicPath = proPicDoc.link();
+
+  console.log(proPic_Id);
+  console.log(proPicDoc);
+  console.log(proPicPath);
+  }
+
+  return {
+    imagePath,
+    proPicPath,
+    issueId,
+    issue,
+    onDragStop,
+    onChange,
+  };
+})(Issue);
