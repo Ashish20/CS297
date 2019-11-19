@@ -25,11 +25,11 @@ import Comments from '../Comment/Comments';
 // import ProgressIndicator from '../ProgressIndicator/ProgressIndicator';
 import StateIndicator from '../ProgressIndicator/StateIndicator';
 import Issues from '../../../api/issues/issues';
-import UserFiles from '../../../api/UserFiles/userFiles'
+import UserFiles from '../../../api/UserFiles/userFiles';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 345,
+    maxWidth: 600,
     marginBottom: '10px',
     marginTop: '10px',
   },
@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     }),
   },
   expandOpen: {
-    transform: 'rotate(180deg)',
+    transform: 'rotate(0deg)',
   },
   avatar: {
     backgroundColor: red[500],
@@ -67,12 +67,17 @@ function onIssueStateChange({ event, issueId, newState }) {
   // }
 }
 
-
-function Issue({ imagePath, proPicPath, issueId, issue, onDragStop, onChange }) {
-
+function Issue({
+  imagePath,
+  proPicPath,
+  issueId,
+  issue,
+  onDragStop,
+  onChange,
+}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  
+
   const [isUpvoted, setIsUpvote] = React.useState(
     issue.upVoters && issue.upVoters.includes(Meteor.userId())
   );
@@ -98,9 +103,9 @@ function Issue({ imagePath, proPicPath, issueId, issue, onDragStop, onChange }) 
       <CardHeader
         className={classes.action}
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            {/* {issue.ownerName ? issue.ownerName.substring(0, 1) : ''} */}
-            <img className = "avatar" src = {proPicPath}/>
+          <Avatar className={classes.avatar}>
+            {issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
+            {/* <img className="avatar" src={proPicPath} /> */}
           </Avatar>
         }
         action={
@@ -125,16 +130,8 @@ function Issue({ imagePath, proPicPath, issueId, issue, onDragStop, onChange }) 
       <CardContent>
         <Typography>{issue.description}</Typography>
       </CardContent>
-      <CardContent>
-        <img className = "image" src = {imagePath}/>
-      </CardContent>
-      {issue.image && (
-        <CardMedia
-          className={classes.media}
-          image="https://via.placeholder.com/150
-"
-          title="Paella dish"
-        />
+      {issue.imageURL && (
+        <CardMedia className={classes.media} image={imagePath} />
       )}
       <CardActions disableSpacing>
         {/* <DiscreteSlider
@@ -159,7 +156,13 @@ function Issue({ imagePath, proPicPath, issueId, issue, onDragStop, onChange }) 
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
+          {issue.comments ? (
+            <Typography variant="body2">
+              {`${issue.comments.length} comments`}
+            </Typography>
+          ) : (
+            <Typography variant="body2">Add a comment</Typography>
+          )}
         </IconButton>
       </CardActions>
 
@@ -183,9 +186,12 @@ function Issue({ imagePath, proPicPath, issueId, issue, onDragStop, onChange }) 
 // );
 
 export default withTracker(props => {
-  const subscriberHandles = [ Meteor.subscribe('user'), Meteor.subscribe('files.all')];
+  const subscriberHandles = [
+    Meteor.subscribe('user'),
+    Meteor.subscribe('files.all'),
+  ];
   const propsReady = subscriberHandles.every(handle => handle.ready());
-  console.log("In Withtrackerrrrrrrrrrrrrrr");
+  console.log('In Withtrackerrrrrrrrrrrrrrr');
 
   let image_Id = '';
   let issuedoc = '';
@@ -199,23 +205,23 @@ export default withTracker(props => {
   let onChange = props.onChange;
 
   if (propsReady) {
-  // Issue Image
-  image_Id = props.issue.imageURL;
-  issuedoc = UserFiles.findOne({_id : image_Id});
-  imagePath = issuedoc.link();  
+    // Issue Image
+    image_Id = props.issue.imageURL;
+    issuedoc = UserFiles.findOne({ _id: image_Id });
+    imagePath = issuedoc && issuedoc.link();
 
-  console.log(image_Id);
-  console.log(issuedoc);
-  console.log(imagePath);
+    console.log(image_Id);
+    console.log(issuedoc);
+    console.log(imagePath);
 
-  // User Image
-  proPic_Id = Meteor.user().imageURL;
-  proPicDoc = UserFiles.findOne({_id : proPic_Id});
-  proPicPath = proPicDoc.link();
+    // User Image
+    proPic_Id = Meteor.user().imageURL;
+    proPicDoc = UserFiles.findOne({ _id: proPic_Id });
+    proPicPath = proPicDoc && proPicDoc.link();
 
-  console.log(proPic_Id);
-  console.log(proPicDoc);
-  console.log(proPicPath);
+    console.log(proPic_Id);
+    console.log(proPicDoc);
+    console.log(proPicPath);
   }
 
   return {

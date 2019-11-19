@@ -1,10 +1,11 @@
+import { Grid, Paper } from '@material-ui/core';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Issues from '../../../api/issues/issues';
-import Issue from '../../components/Issue/Issue';
 import { issueUpdate } from '../../../api/issues/methods';
+import Issue from '../../components/Issue/Issue';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class NewsFeed extends React.Component {
@@ -33,19 +34,31 @@ class NewsFeed extends React.Component {
     const { feedIssues } = this.props;
 
     return (
-      <React.Fragment>
-        {feedIssues.map(issue => (
-          // eslint-disable-next-line no-unused-expressions
-          <div key={issue._id} className="container">
-            <Issue
-              issueId={issue._id}
-              issue={issue}
-              onDragStop={this.onDragStop}
-              onChange={this.onChange}
-            />
-          </div>
-        ))}
-      </React.Fragment>
+      <Grid container spacing={6}>
+        <Grid item xs={3}>
+          <Paper>Placeholder for other content</Paper>
+        </Grid>
+
+        <Grid item xs={8}>
+          <React.Fragment>
+            {feedIssues.map(issue => (
+              // eslint-disable-next-line no-unused-expressions
+              <div key={issue._id} className="container">
+                <Issue
+                  issueId={issue._id}
+                  issue={issue}
+                  onDragStop={this.onDragStop}
+                  onChange={this.onChange}
+                />
+              </div>
+            ))}
+          </React.Fragment>
+        </Grid>
+
+        <Grid item xs={3}>
+          <Paper> Placeholder for some other content</Paper>
+        </Grid>
+      </Grid>
     );
   }
 }

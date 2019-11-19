@@ -1,9 +1,9 @@
+import { Button } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import CreateIcon from '@material-ui/icons/Create';
+import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import { issueAddComment } from '../../../api/issues/methods';
 
@@ -11,27 +11,35 @@ const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    marginLeft: theme.spacing(2),
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200,
-  },
-  margin: {
-    margin: theme.spacing(1),
+    width: '100%',
   },
   multiline: {
     padding: '10px',
-    borderRadius: '20%',
+    borderRadius: '20px',
   },
 }));
 
 export default function AddComment({ issue }) {
   const classes = useStyles();
   const [comment, setComment] = useState('');
+  //   const formRef = useRef(null);
   const handleAddComment = e => {
     e.preventDefault();
     issueAddComment.call({ issueId: issue._id, comment });
+    setComment('');
+  };
+
+  const handleKeyPress = e => {
+    // if the user presses enter button
+    if (e.charCode === 13 && !e.shiftKey) {
+      e.preventDefault();
+      handleAddComment(e);
+    }
   };
   return (
     <form
@@ -39,33 +47,42 @@ export default function AddComment({ issue }) {
       noValidate
       autoComplete="off"
       onSubmit={handleAddComment}
+      //   ref = {formRef}
     >
-      <div className={classes.margin}>
-        <Grid container spacing={1} alignItems="center">
-          <Grid item>
-            <Avatar alt="Remy Sharp" src="https://via.placeholder.com/600" />
-          </Grid>
-          <Grid item>
-            <TextField
-              id="outlined-textarea"
-              value={comment}
-              onChange={e => setComment(e.target.value)}
-              // label="Multiline Placeholder"
-              placeholder="Comment on this issue"
-              multiline
-              className={classes.textField}
-              margin="normal"
-              variant="outlined"
-              InputProps={{ className: classes.multiline }}
-            />
-          </Grid>
-          <Grid item>
-            <IconButton type="submit">
-              <CreateIcon />
-            </IconButton>
-          </Grid>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs={1}>
+          <Avatar className={classes.avatar}>
+            {Meteor.user() ? Meteor.user().name.substring(0, 1) : ''}
+            {/* <img className="avatar" src={proPicPath} /> */}
+          </Avatar>
         </Grid>
-      </div>
+        <Grid item xs={8}>
+          <TextField
+            id="outlined-textarea"
+            value={comment}
+            required
+            onChange={e => setComment(e.target.value)}
+            onKeyPress={handleKeyPress}
+            // label="Multiline Placeholder"
+            placeholder="Comment on this issue"
+            multiline
+            className={classes.textField}
+            margin="normal"
+            variant="outlined"
+            InputProps={{ className: classes.multiline }}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            size="small"
+          >
+            Comment
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 }
