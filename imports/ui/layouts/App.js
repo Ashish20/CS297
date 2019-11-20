@@ -33,7 +33,7 @@ const App = props => (
       <PropsRoute component={Navbar} {...props} />
       {props.loggingIn && <Spinner />}
       <Switch>
-        <PropsRoute exact path="/" component={Landing} {...props} />
+        <PropsRoute exact path="/" component={Login} {...props} />
         <PropsRoute path="/login" component={Login} {...props} />
         <PropsRoute path="/signup" component={Signup} {...props} />
         <PropsRoute exact path="/profile" component={Profile} {...props} />

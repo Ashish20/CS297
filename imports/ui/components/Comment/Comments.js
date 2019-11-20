@@ -19,8 +19,8 @@ export default function Comments({ issue }) {
   const { comments } = issue;
   return (
     <List className={classes.root}>
-      {comments.map(comment => (
-        <Comment comment={comment} />
+      {comments.map((comment, index) => (
+        <Comment key={index} comment={comment} />
       ))}
     </List>
   );
