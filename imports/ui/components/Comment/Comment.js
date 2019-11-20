@@ -10,9 +10,9 @@ export default function Comment({ comment }) {
   return (
     <>
       <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="https://via.placeholder.com/150" />
-        </ListItemAvatar>
+        <Avatar>
+          {Meteor.user() ? Meteor.user().name.substring(0, 1) : ''}
+        </Avatar>
         <ListItemText
           primary={comment.author.name}
           secondary={
