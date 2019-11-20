@@ -41,18 +41,18 @@ class Search extends Component {
 
   render() {
     const { query } = this.state;
-    const { propsReady, reps } = this.props;
+    const { propsReady, users } = this.props;
 
     if (propsReady) {
       const fetchDataFromDatabase = () => {
-        const actors = reps.map(rep => {
+        const records = users.map(rep => {
           return {
             objectID: rep._id,
             name: rep.name,
             designation: rep.designation,
           };
         });
-        return actors;
+        return records;
       };
 
       const records = fetchDataFromDatabase();
@@ -97,14 +97,14 @@ Search.propTypes = {
 };
 
 export default withTracker(() => {
-  const subscriberHandles = [Meteor.subscribe('users.reps')];
+  const subscriberHandles = [Meteor.subscribe('users.all')];
   const propsReady = subscriberHandles.every(handle => handle.ready());
-  let reps = null;
+  let users = null;
   if (propsReady) {
-    reps = Meteor.users.find({ userType: USER_TYPE.REPRESENTATIVE.id }).fetch();
+    users = Meteor.users.find().fetch();
   }
   return {
     propsReady,
-    reps,
+    users,
   };
 })(Search);
