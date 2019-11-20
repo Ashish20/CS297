@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,25 +10,69 @@ import Divider from '@material-ui/core/Divider';
 import Issues from '../../../../api/issues/issues';
 import { withTracker } from 'meteor/react-meteor-data';
 import Spinner from '../../../components/Spinner';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Box from '@material-ui/core/Box';
+import PropTypes from 'prop-types';
+import SwipeableViews from 'react-swipeable-views';
 import { USER_TYPE, ISSUE_STATE } from '../../../../constants';
-// import Issues from '../../../../api/users/issues';
 import UserFiles from '../../../../api/UserFiles/userFiles';
 import './profilePage.scss';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 345,
+    maxWidth: 500,
+    marginBottom: '10px',
+    marginTop: '10px',
+    alignContent: 'center',
   },
   media: {
-    height: 140,
+    height: 0,
+    paddingTop: '56.25%',
   },
-});
+
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
 
 const options = {
   title: 'Status of Raised Issues',
   pieHole: 0.4,
   is3D: true,
 };
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      <Box p={3}>{children}</Box>
+    </Typography>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 function MediaCard({
   propsReady,
@@ -40,6 +84,16 @@ function MediaCard({
   imageURL,
 }) {
   const classes = useStyles();
+  const theme = useTheme();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const handleChangeIndex = index => {
+    setValue(index);
+  };
 
   if (propsReady) {
     const userName = user.name;
@@ -51,58 +105,89 @@ function MediaCard({
     const imgURL = UserFiles.findOne({ _id: imageURL });
     const imgpath = imgURL.link();
     const data = [
-      ['Task', 'Hours per Day'],
+      ['Issue Status', 'Count'],
       ['In Progress', inProgressCount],
       ['To-Do', todoCount],
       ['Backlogged', backlogCount],
       ['Completed', completedCount],
     ];
 
+    const isRepresentative = userType === USER_TYPE.REPRESENTATIVE.id;
+
     console.log('Backlog count ' + backlogCount);
 
     return (
-      <React.Fragment>
-        <Card className={classes.card}>
-          <CardActionArea>
-            {/* <CardMedia
-              className={classes.media}
-              image=""
-              title="Contemplative Reptile"
-            /> */}
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                {userName}
-              </Typography>
-              <div>
-                <img className="image" src={imgpath} />
-              </div>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {address}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {emailId}
-              </Typography>
-              {userType === USER_TYPE.REPRESENTATIVE.id && (
-                <Typography variant="body2" color="textSecondary" component="p">
-                  User Type - {userType}
-                </Typography>
-              )}
-            </CardContent>
-          </CardActionArea>
-        </Card>
-        <Divider />
-        {userType === USER_TYPE.REPRESENTATIVE.id && (
-          <Chart
-            chartType="PieChart"
-            data={data}
-            options={options}
-            graph_id="PieChart"
-            width={'100%'}
-            height={'400px'}
-            legend_toggle
-          />
-        )}
-      </React.Fragment>
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="Profile tabs"
+            centered
+          >
+            <Tab label="User Details" {...a11yProps(0)} />
+            {isRepresentative && <Tab label="Analytics" {...a11yProps(1)} />}
+          </Tabs>
+        </AppBar>
+        <SwipeableViews
+          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          index={value}
+          onChangeIndex={handleChangeIndex}
+        >
+          <TabPanel value={value} index={0} dir={theme.direction}>
+            <Card className={classes.card}>
+              <CardActionArea>
+                <CardMedia
+                  className={classes.media}
+                  image={imgpath}
+                  title="Profile picture"
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="h2">
+                    {userName}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {address}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {emailId}
+                  </Typography>
+                  {isRepresentative && (
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      User Type - {userType}
+                    </Typography>
+                  )}
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </TabPanel>
+          {isRepresentative && (
+            <TabPanel value={value} index={1} dir={theme.direction}>
+              <Chart
+                chartType="PieChart"
+                data={data}
+                options={options}
+                graph_id="PieChart"
+                width={'100%'}
+                height={'400px'}
+                legend_toggle
+              />
+            </TabPanel>
+          )}
+        </SwipeableViews>
+      </div>
     );
   }
 
