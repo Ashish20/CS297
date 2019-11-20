@@ -30,7 +30,7 @@ import UserFiles from '../../../api/UserFiles/userFiles';
 const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 600,
-    marginBottom: '10px',
+    border: 'ridge',
     marginTop: '10px',
   },
   media: {

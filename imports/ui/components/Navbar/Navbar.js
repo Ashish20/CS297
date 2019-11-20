@@ -95,29 +95,34 @@ Status.propTypes = {
 const Navbar = props => {
   const { loggedIn } = props;
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Status loggedIn={loggedIn} />
-      <span className="navbar-brand" href="#">
-        <NavLink to="/">PoliTracker</NavLink>
-      </span>
-      {/* {loggedIn && <NavLink to="/assigned_issues/">Assigned Issues</NavLink>} */}
-      {/* {loggedIn && <NavLink to="/newsfeed/">News Feed</NavLink>} */}
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon" />
-      </button>
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav ml-auto">
-          {loggedIn ? <LoggedInNav {...props} /> : <PublicNav />}
-        </ul>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div className="fixed-nav">
+        <div className="brand-container">
+          <Status loggedIn={loggedIn} />
+          <span className="navbar-brand" href="#">
+            <NavLink to="/">PoliTracker</NavLink>
+          </span>
+        </div>
+        {/* {loggedIn && <NavLink to="/assigned_issues/">Assigned Issues</NavLink>} */}
+        {/* {loggedIn && <NavLink to="/newsfeed/">News Feed</NavLink>} */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon" />
+        </button>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav nav ml-auto flex-column nav-pills nav-stacked">
+            {loggedIn ? <LoggedInNav {...props} /> : <PublicNav />}
+          </ul>
+        </div>
       </div>
+      <div className="fixed-nav-width"/>
     </nav>
   );
 };

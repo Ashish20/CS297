@@ -1,22 +1,42 @@
 .navbar {
-  background-color: #444;
-  * {
-    :hover,
-    :active {
-      text-decoration: none;
-    }
+  button,span,div,a{
+    color:rgba(255,255,255,1);
   }
-  a {
-    color: #666;
+  display: block;
+}
+
+.navbar.bg-primary {
+    background-color:#3f51b5 !important
   }
-  .active {
-    color: #007bff;
+
+@media (min-width: 992px) {
+  .navbar-expand-lg {
+    flex-flow: column nowrap;
   }
-  .navbar-brand a {
-    color: #666;
-  }
-  .dropdown-item:active {
-    color: #212529;
-    background-color: #fff;
-  }
+}
+
+.navbar-collapse {
+  align-items: flex-start;
+}
+
+.brand-container div {
+  display: inline;
+}
+
+.fixed-nav{
+  position:fixed;
+  top:20px;
+  left:-1px;
+}
+
+// nav::after{
+//   width:100px;
+//   content:' ';
+//   border:solid;
+// }
+
+.fixed-nav-width{
+  // border:solid;
+  width:209px;
+
 }

@@ -35,22 +35,19 @@ class NewsFeed extends React.Component {
 
     return (
       <Grid container spacing={6}>
-        <Grid item xs={3}>
-          <Paper>Placeholder for other content</Paper>
+        <Grid item xs={1}>
         </Grid>
 
         <Grid item xs={8}>
           <React.Fragment>
             {feedIssues.map(issue => (
               // eslint-disable-next-line no-unused-expressions
-              <div key={issue._id} className="container">
                 <Issue
                   issueId={issue._id}
                   issue={issue}
                   onDragStop={this.onDragStop}
                   onChange={this.onChange}
                 />
-              </div>
             ))}
           </React.Fragment>
         </Grid>
