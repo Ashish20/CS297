@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import { Collapse, Divider, Grid } from '@material-ui/core';
+import { Collapse, Divider, Grid, Link } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -85,7 +85,8 @@ function Issue({
 
   console.log('In Recipe', issueId);
 
-  const handleExpandClick = () => {
+  const handleExpandClick = e => {
+    e.preventDefault();
     setExpanded(!expanded);
   };
 
@@ -164,22 +165,22 @@ function Issue({
           <Typography variant="body2">{upVotes}</Typography>
         </IconButton>
 
-        <IconButton
+        <Typography
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
           })}
-          onClick={handleExpandClick}
           aria-expanded={expanded}
           aria-label="show more"
         >
-          {issue.comments ? (
-            <Typography variant="body2">
-              {`${issue.comments.length} comments`}
-            </Typography>
-          ) : (
-            <Typography variant="body2">Add a comment</Typography>
-          )}
-        </IconButton>
+          <Link
+            href="#"
+            color="inherit"
+            variant="body2"
+            onClick={handleExpandClick}
+          >
+            {`${issue.comments.length} comments`}
+          </Link>
+        </Typography>
       </CardActions>
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
