@@ -56,7 +56,7 @@ export const issueCreate = new ValidatedMethod({
       message: 'You are not allowed to call this method',
     },
   },
-  validate: null 
+  validate: null,
   // new SimpleSchema({
   //   category: {
   //     type: String,
@@ -86,8 +86,7 @@ export const issueCreate = new ValidatedMethod({
   //     optional: false,
   //   },
   // }).validator()
-  ,
-  run({ category, title, description, severity, location, assignedTo, imageURL }) {
+  run({ category, title, description, location, assignedTo, imageURL }) {
     if (Meteor.isServer) {
       // secure code - not available on the client
       if (!this.userId) {
@@ -101,7 +100,6 @@ export const issueCreate = new ValidatedMethod({
         category,
         title,
         description,
-        severity,
         location,
         assignedTo,
         ownerName,
@@ -120,31 +118,31 @@ export const issueCreate = new ValidatedMethod({
   },
 });
 
-export const issueUpdate = new ValidatedMethod({
-  name: 'issues.update',
-  mixins,
-  beforeHooks: [beforeHookExample],
-  afterHooks: [afterHookExample],
-  checkLoggedInError,
-  checkRoles: {
-    roles: ['admin', 'user'],
-    rolesError: {
-      error: 'not-allowed',
-      message: 'You are not allowed to call this method',
-    },
-  },
-  validate: new SimpleSchema({
-    issueId: { type: String },
-    severity: { type: Number },
-  }).validator(),
-  run({ issueId, severity }) {
-    // throw new Meteor.Error(severity);
-    if (Meteor.isServer) {
-      return Issues.update({ _id: issueId }, { $set: { severity } });
-    }
-    // call code on client and server (optimistic UI)
-  },
-});
+// export const issueUpdate = new ValidatedMethod({
+//   name: 'issues.update',
+//   mixins,
+//   beforeHooks: [beforeHookExample],
+//   afterHooks: [afterHookExample],
+//   checkLoggedInError,
+//   checkRoles: {
+//     roles: ['admin', 'user'],
+//     rolesError: {
+//       error: 'not-allowed',
+//       message: 'You are not allowed to call this method',
+//     },
+//   },
+//   validate: new SimpleSchema({
+//     issueId: { type: String },
+//     severity: { type: Number },
+//   }).validator(),
+//   run({ issueId, severity }) {
+//     // throw new Meteor.Error(severity);
+//     if (Meteor.isServer) {
+//       return Issues.update({ _id: issueId }, { $set: { severity } });
+//     }
+//     // call code on client and server (optimistic UI)
+//   },
+// });
 
 export const issueUpdateState = new ValidatedMethod({
   name: 'issues.update.state',

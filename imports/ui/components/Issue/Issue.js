@@ -72,7 +72,7 @@ function Issue({
   issueId,
   issue,
   onDragStop,
-  onChange,
+  // onChange,
 }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -201,7 +201,7 @@ export default withTracker(props => {
   let issueId = props.issueId;
   let issue = props.issue;
   let onDragStop = props.onDragStop;
-  let onChange = props.onChange;
+  // let onChange = props.onChange;
 
   if (propsReady) {
     // Issue Image
@@ -229,6 +229,6 @@ export default withTracker(props => {
     issueId,
     issue,
     onDragStop,
-    onChange,
+    // onChange,
   };
 })(Issue);

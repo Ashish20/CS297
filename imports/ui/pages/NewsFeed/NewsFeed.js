@@ -17,16 +17,16 @@ class NewsFeed extends React.Component {
     // };
   }
 
-  onChange = (issueId, ev, val) => {
-    // console.log(ev.target);
-    // console.log(val);
-    // console.log('IN newsfeed ', issueId);
-    // this.setState({
-    //   changedIssueId: issueId,
-    //   severity: val,
-    // });
-    issueUpdate.call({ issueId, severity: val });
-  };
+  // onChange = (issueId, ev, val) => {
+  //   // console.log(ev.target);
+  //   // console.log(val);
+  //   // console.log('IN newsfeed ', issueId);
+  //   // this.setState({
+  //   //   changedIssueId: issueId,
+  //   //   severity: val,
+  //   // });
+  //   // issueUpdate.call({ issueId, severity: val });
+  // };
 
   //   onDragStop = () => {};
 
@@ -35,19 +35,17 @@ class NewsFeed extends React.Component {
 
     return (
       <Grid container spacing={6}>
-        <Grid item xs={1}>
-        </Grid>
+        <Grid item xs={3} />
 
         <Grid item xs={8}>
           <React.Fragment>
             {feedIssues.map(issue => (
               // eslint-disable-next-line no-unused-expressions
-                <Issue
-                  issueId={issue._id}
-                  issue={issue}
-                  onDragStop={this.onDragStop}
-                  onChange={this.onChange}
-                />
+              <Issue
+                issueId={issue._id}
+                issue={issue}
+                onDragStop={this.onDragStop}
+              />
             ))}
           </React.Fragment>
         </Grid>

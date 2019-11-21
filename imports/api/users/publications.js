@@ -79,32 +79,6 @@ if (Meteor.isServer) {
     }
     return this.ready();
   });
-
-  // export const issueStateCount = new ValidatedMethod({
-  //   name: 'issues.stateCount',
-  //   mixins,
-  //   beforeHooks: [beforeHookExample],
-  //   afterHooks: [afterHookExample],
-  //   checkLoggedInError,
-  //   checkRoles: {
-  //     roles: ['admin', 'user'],
-  //     rolesError: {
-  //       error: 'not-allowed',
-  //       message: 'You are not allowed to call this method',
-  //     },
-  //   },
-  //   validate: new SimpleSchema({
-  //     assignedTo: { type: String },
-  //     state: { type: String },
-  //   }).validator(),
-  //   run({ issueId, state }) {
-  //     // throw new Meteor.Error(severity);
-  //     if (Meteor.isServer) {
-  //       return Issues.find({ assignedTo: issueId }, { state: { state } }).count();
-  //     }
-  //     // call code on client and server (optimistic UI)
-  //   },
-  // });
 }
 
 Meteor.publish('userProfile', function(userId) {

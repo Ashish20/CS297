@@ -6,8 +6,7 @@ import Spinner from '../../components/Spinner';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { USER_TYPE } from '../../../constants';
-import UserFiles from '../../../api/UserFiles/userFiles'
-
+import UserFiles from '../../../api/UserFiles/userFiles';
 
 import './AssignedIssues.scss';
 // import { issueInsert } from '../../../api/issues/issues.js';
@@ -18,7 +17,7 @@ import {
 } from '../../../api/issues/methods';
 import Issues from '../../../api/issues/issues';
 import { ISSUE_CATEGORIES } from '../../../constants';
-import FileUpload from '../../components/FileUpload/FileUpload'
+import FileUpload from '../../components/FileUpload/FileUpload';
 const debug = require('debug')('demo:file');
 // import Users from '../../../api/users/users';
 
@@ -30,15 +29,14 @@ class AssignedIssues extends React.Component {
       title: '',
       description: '',
       category: '',
-      severity: 1,
       // location: '',
       assignedTo: '',
       category_options: Object.keys(ISSUE_CATEGORIES),
       assignedRepList: [],
-      imageURL : '',
+      imageURL: '',
       uploading: [],
       progress: 0,
-      inProgress: false
+      inProgress: false,
     };
     this.state = this.initialState;
   }
@@ -89,8 +87,10 @@ class AssignedIssues extends React.Component {
   };
 
   renderIssues = () => {
-
-    let link = UserFiles.findOne({_id: this.state.imageURL}, {_id:0, path:1});
+    let link = UserFiles.findOne(
+      { _id: this.state.imageURL },
+      { _id: 0, path: 1 }
+    );
 
     const { assignedIssues } = this.props;
     const listOfIssues = assignedIssues.map(issue => (
@@ -101,7 +101,10 @@ class AssignedIssues extends React.Component {
             <div className="card-body">
               <h5 className="card-title">{issue.title}</h5>
               <p className="card-text">{issue.description}</p>
-              <div> <img src = {link} /> </div>
+              <div>
+                {' '}
+                <img src={link} />{' '}
+              </div>
               <p className="card-text" key={issue._id}>
                 {issue.createdOn.toDateString()}
               </p>
@@ -145,7 +148,6 @@ class AssignedIssues extends React.Component {
       title,
       description,
       category,
-      severity,
       // location,
       assignedTo,
       imageURL,
@@ -155,7 +157,6 @@ class AssignedIssues extends React.Component {
       category,
       title,
       description,
-      severity,
       location: this.props.user.zip,
       assignedTo,
       imageURL,
@@ -167,9 +168,9 @@ class AssignedIssues extends React.Component {
     this.setState(this.initialState);
   }
 
-  fileURL = (url) => {
-    this.setState({imageURL : url});
-  }
+  fileURL = url => {
+    this.setState({ imageURL: url });
+  };
 
   // updateState = (newstate) => {
   // }
@@ -204,7 +205,7 @@ class AssignedIssues extends React.Component {
                           }
                         />
                       </div>
-                      <div className="form-group">
+                      {/* <div className="form-group">
                         <label htmlFor="issueSeverity">Severity</label>
                         <input
                           type="number"
@@ -220,7 +221,7 @@ class AssignedIssues extends React.Component {
                             })
                           }
                         />
-                      </div>
+                      </div> */}
                       <div className="form-group">
                         <label htmlFor="issueLocation">Zip</label>
                         <input
@@ -315,8 +316,9 @@ class AssignedIssues extends React.Component {
                         />
                       </div>
                       <p>Upload Issue Image: </p>
-                      <FileUpload fileURL = {this.fileURL}
-                                  // updateState = {this.updateState}
+                      <FileUpload
+                        fileURL={this.fileURL}
+                        // updateState = {this.updateState}
                       />
 
                       <div className="form-group no-margin">

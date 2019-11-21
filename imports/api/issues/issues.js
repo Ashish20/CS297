@@ -24,13 +24,13 @@ const schema = new SimpleSchema({
     type: String,
     optional: false,
   },
-  severity: {
-    type: Number,
-    optional: false,
-    min: 1,
-    max: 10,
-    // decimal: true,
-  },
+  // severity: {
+  //   type: Number,
+  //   optional: false,
+  //   min: 1,
+  //   max: 10,
+  //   // decimal: true,
+  // },
   // zip code
   location: {
     type: String,
@@ -92,7 +92,7 @@ const schema = new SimpleSchema({
   'comments.$.author.name': String,
   'comments.$.content': String,
   imageURL: {
-    type:String,
+    type: String,
     optional: true,
   },
 });
