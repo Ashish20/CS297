@@ -6,7 +6,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Popper from '@material-ui/core/Popper';
 import { withStyles } from '@material-ui/core/styles';
-import Meteor from 'meteor/meteor';
 import React from 'react';
 import { ISSUE_STATE, USER_TYPE } from '../../../constants';
 
