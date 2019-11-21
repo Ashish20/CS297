@@ -20,6 +20,7 @@ import RecoverPassword from '../pages/RecoverPassword';
 import ResetPassword from '../pages/ResetPassword';
 import AssignedIssues from '../pages/AssignedIssues';
 import NewsFeed from '../pages/NewsFeed';
+import Kanban from '../pages/KanbanBoard'
 
 // import Spinner
 import Spinner from '../components/Spinner';
@@ -52,6 +53,11 @@ const App = props => (
         <PropsRoute
           path="/reset-password/:token"
           component={ResetPassword}
+          {...props}
+        />
+        <PropsRoute
+          path="/Kanban"
+          component={Kanban}
           {...props}
         />
         <PropsRoute component={NotFound} {...props} />

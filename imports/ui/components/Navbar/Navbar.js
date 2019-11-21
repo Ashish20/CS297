@@ -36,6 +36,15 @@ const SearchBar = () => (
 
 const LoggedInNav = props => (
   <>
+    {Meteor.user().userType === USER_TYPE.REPRESENTATIVE.id && (
+      <li>
+        <NavLink to="/Kanban">
+          <button type="button" className="dropdown-item">
+            Kanban Board
+          </button>
+        </NavLink>
+      </li>
+    )}
     {Meteor.user().userType === USER_TYPE.CITIZEN.id && (
       <li>
         <NavLink to="/assigned_issues">
