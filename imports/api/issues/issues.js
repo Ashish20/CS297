@@ -95,6 +95,10 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  assigneeName: {
+    type: String,
+    optional: false,
+  },
 });
 
 // attach schema

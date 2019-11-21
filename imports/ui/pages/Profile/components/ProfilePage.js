@@ -103,7 +103,7 @@ function MediaCard({
     const designation = 'Designation - ' + user.designation;
     // var obj = require(Mongo).ObjectId;
     const imgURL = UserFiles.findOne({ _id: imageURL });
-    const imgpath = imgURL.link();
+    const imgpath = imgURL && imgURL.link();
     const data = [
       ['Issue Status', 'Count'],
       ['In Progress', inProgressCount],

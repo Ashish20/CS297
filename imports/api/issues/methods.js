@@ -94,6 +94,7 @@ export const issueCreate = new ValidatedMethod({
       }
       console.log('running insert method');
       const ownerName = Meteor.user().name;
+      const assigneeName = Meteor.users.findOne(assignedTo).name;
       const ownerId = this.userId;
       const upVoters = [];
       const issueId = Issues.insert({
@@ -105,6 +106,7 @@ export const issueCreate = new ValidatedMethod({
         ownerName,
         upVoters,
         imageURL,
+        assigneeName,
       });
       Meteor.users.update(
         { _id: ownerId },

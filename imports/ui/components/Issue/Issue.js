@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import { Collapse, Divider } from '@material-ui/core';
+import { Collapse, Divider, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,22 +10,22 @@ import { blue, red } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
 import { Meteor } from 'meteor/meteor';
-import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 import {
   issueToggleUpVote,
   issueUpdateState,
 } from '../../../api/issues/methods';
+import UserFiles from '../../../api/UserFiles/userFiles';
 import AddComment from '../Comment/AddComment';
 import Comments from '../Comment/Comments';
 // import ProgressIndicator from '../ProgressIndicator/ProgressIndicator';
 import StateIndicator from '../ProgressIndicator/StateIndicator';
-import Issues from '../../../api/issues/issues';
-import UserFiles from '../../../api/UserFiles/userFiles';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -117,7 +117,24 @@ function Issue({
           />
           // </IconButton>
         }
-        title={issue.ownerName}
+        title={
+          <Grid container spacing={2}>
+            <Grid item>
+              <NavLink to={`/profile/${issue.owner}`}>
+                {issue.ownerName}
+              </NavLink>
+            </Grid>
+            <Grid item>
+              {/* <ArrowRightIcon fontSize="medium" /> */}
+              <ArrowForwardIcon fontSize="medium" color="primary" />
+            </Grid>
+            <Grid item>
+              <NavLink to={`/profile/${issue.assignedTo}`}>
+                {issue.assigneeName || issue.assignedTo}
+              </NavLink>
+            </Grid>
+          </Grid>
+        }
         subheader={new Date(issue.createdOn).toDateString()}
       />
 
