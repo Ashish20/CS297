@@ -111,7 +111,9 @@ function Issue({
         action={
           // <IconButton aria-label="settings">
           <StateIndicator
+            assignedTo={issue.assignedTo}
             issueId={issueId}
+            userId={Meteor.userId()}
             userTypeId={Meteor.user().userType}
             issueStateId={issue.state}
             handleStateChange={onIssueStateChange}
@@ -127,7 +129,7 @@ function Issue({
             </Grid>
             <Grid item>
               {/* <ArrowRightIcon fontSize="medium" /> */}
-              <ArrowForwardIcon fontSize="medium" color="primary" />
+              <ArrowForwardIcon fontSize="default" color="primary" />
             </Grid>
             <Grid item>
               <NavLink to={`/profile/${issue.assignedTo}`}>

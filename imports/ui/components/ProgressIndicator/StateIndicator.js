@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Popper from '@material-ui/core/Popper';
 import { withStyles } from '@material-ui/core/styles';
+import Meteor from 'meteor/meteor';
 import React from 'react';
 import { ISSUE_STATE, USER_TYPE } from '../../../constants';
 
@@ -49,6 +50,8 @@ const DoneChip = withStyles({
 })(SmallChip);
 
 export default function SplitButton({
+  userId,
+  assignedTo,
   userTypeId,
   issueId,
   issueStateId,
@@ -114,7 +117,9 @@ export default function SplitButton({
         <List>
           <ListItem
             onClick={
-              userType === USER_TYPE.REPRESENTATIVE ? handleToggle : undefined
+              userType === USER_TYPE.REPRESENTATIVE && assignedTo === userId
+                ? handleToggle
+                : undefined
             }
             ref={anchorRef}
             variant="extended"
