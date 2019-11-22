@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { USER_TYPE, ISSUE_STATE } from '../../../../constants';
 import UserFiles from '../../../../api/UserFiles/userFiles';
+import Issue from '../../../components/Issue/Issue';
 import './profilePage.scss';
 
 const useStyles = makeStyles(theme => ({
@@ -82,6 +83,7 @@ function MediaCard({
   completedCount,
   user,
   imageURL,
+  myIssues,
 }) {
   const classes = useStyles();
   const theme = useTheme();
@@ -127,6 +129,7 @@ function MediaCard({
           >
             <Tab label="User Details" {...a11yProps(0)} />
             {isRepresentative && <Tab label="Analytics" {...a11yProps(1)} />}
+            {!isRepresentative && <Tab label="Issues" {...a11yProps(1)} />}
           </Tabs>
         </AppBar>
         <SwipeableViews
@@ -161,13 +164,22 @@ function MediaCard({
                     {emailId}
                   </Typography>
                   {isRepresentative && (
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      User Type - {userType}
-                    </Typography>
+                    <>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        User Type - {userType}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        {designation}
+                      </Typography>
+                    </>
                   )}
                 </CardContent>
               </CardActionArea>
@@ -187,6 +199,18 @@ function MediaCard({
             </TabPanel>
           )}
         </SwipeableViews>
+        {!isRepresentative && (
+          <TabPanel value={value} index={1} dir={theme.direction}>
+            {myIssues.map(issue => (
+              // eslint-disable-next-line no-unused-expressions
+              <Issue
+                issueId={issue._id}
+                issue={issue}
+                // onDragStop={this.onDragStop}
+              />
+            ))}
+          </TabPanel>
+        )}
       </div>
     );
   }
@@ -198,7 +222,7 @@ export default withTracker(props => {
   const subscriberHandles = [
     Meteor.subscribe('issues.stateCount', props.userId),
     Meteor.subscribe('userProfile', props.userId),
-    // Meteor.subscribe('user'),
+    Meteor.subscribe('issues'),
     Meteor.subscribe('files.all'),
   ];
   const propsReady = subscriberHandles.every(handle => handle.ready());
@@ -210,6 +234,7 @@ export default withTracker(props => {
   let completedCount = 0;
   let user = null;
   let imageURL = '';
+  let myIssues = null;
 
   if (propsReady) {
     backlogCount = Issues.find({ state: ISSUE_STATE.BACKLOG.id }).count();
@@ -218,6 +243,11 @@ export default withTracker(props => {
     completedCount = Issues.find({ state: ISSUE_STATE.DONE.id }).count();
     user = Meteor.users.findOne({ _id: props.userId });
     imageURL = user.imageURL;
+    myIssues = Issues.find(
+      { owner: props.userId },
+      { sort: { createdOn: -1 } }
+    ).fetch();
+    console.log(myIssues);
   }
 
   return {
@@ -231,5 +261,6 @@ export default withTracker(props => {
     completedCount,
     user,
     imageURL,
+    myIssues,
   };
 })(MediaCard);

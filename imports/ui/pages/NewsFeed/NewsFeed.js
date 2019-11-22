@@ -44,7 +44,7 @@ class NewsFeed extends React.Component {
               <Issue
                 issueId={issue._id}
                 issue={issue}
-                onDragStop={this.onDragStop}
+                // onDragStop={this.onDragStop}
               />
             ))}
           </React.Fragment>
