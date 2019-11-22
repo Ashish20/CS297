@@ -34,4 +34,11 @@ if (Meteor.isServer) {
     }
     return this.ready();
   });
+
+  // Meteor.publish('issues.stateCount', function() {
+  //   if (this.userId) {
+  //     return Issues.find({ assignedTo: this.userId });
+  //   }
+  //   return this.ready();
+  // });
 }
