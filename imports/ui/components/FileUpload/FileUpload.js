@@ -151,7 +151,15 @@ class FileUploadComponent extends Component {
         <div className="row">
           <div className="col-md-12">
             {/* <p>Upload Image:</p> */}
-            <input type="file" id="fileinput" disabled={this.state.inProgress} ref="fileinput"
+
+
+            {/* <button  class="btn btn-default">Upload</button>
+            <div style={{visibility: hidden}, {position: absolute}, {overflow: hidden}, {width: 0}, {height:0}, {border:none}, {margin:0}, {padding:0}}>
+              <input type="file"  ng2FileSelect />
+            </div> */}
+
+
+            <input type="file"  id="fileinput" /*disabled={this.state.inProgress}*/ ref="fileinput"
                  onChange={e => this.handleUpload(e, this.props.fileURL)}/>
           </div>
         </div>

@@ -107,7 +107,7 @@ class App extends React.Component {
             }
           ]
         }
-        return <Board data={data} handleDragEnd={this.handleDragEnd} />
+        return <Board data={data} handleDragEnd={this.handleDragEnd} className = "whole"/>
       // const ppp = data.lanes[0].cards.length;
       // console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnn");
       // console.log(ppp);
@@ -117,19 +117,20 @@ class App extends React.Component {
 }
 
 export default withTracker(()=> {
-    const issuesSub = [Meteor.subscribe('issues.stateCount')];
+    const issuesSub = [Meteor.subscribe('issues.stateCount', Meteor.userId())];
     const propsReady = issuesSub.every(handle => handle.ready());
 
     let backlog = null;
     let todo = null;
     let inProgress = null;
     let completed = null;
+    let ownerId = ''
 
     if(propsReady) {
-    backlog = Issues.find({ state: ISSUE_STATE.BACKLOG.id });
-    todo = Issues.find({ state: ISSUE_STATE.TODO.id });
-    inProgress = Issues.find({ state: ISSUE_STATE.INPROGRESS.id });
-    completed = Issues.find({ state: ISSUE_STATE.DONE.id });
+    backlog = Issues.find({ state: ISSUE_STATE.BACKLOG.id }).fetch();
+    todo = Issues.find({ state: ISSUE_STATE.TODO.id }).fetch();
+    inProgress = Issues.find({ state: ISSUE_STATE.INPROGRESS.id }).fetch();
+    completed = Issues.find({ state: ISSUE_STATE.DONE.id } ).fetch();
     }
 
     return {
