@@ -32,6 +32,7 @@ if (Meteor.isServer) {
             ownedIssues: 1,
             imageURL: 1,
             notifications: 1,
+            newNotificationsCount: 1,
           },
         }
       );

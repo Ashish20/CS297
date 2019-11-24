@@ -59,9 +59,9 @@ const App = props => (
           />
           <PropsRoute path="/Kanban" component={Kanban} {...props} />
           <PropsRoute
-            path="/notifications/"
+            path="/notifications/:lastClicked"
             component={Notifications}
-            {...props}
+            {...{ props }}
           />
           <PropsRoute component={NotFound} {...props} />
         </Switch>

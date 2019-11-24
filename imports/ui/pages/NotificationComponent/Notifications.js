@@ -14,8 +14,9 @@ Notifications.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  lastClicked: PropTypes.string.isRequired,
 };
 
 export default withTracker(props => {
-  return {};
+  return { lastClicked: props.match.params.lastClicked };
 })(Notifications);

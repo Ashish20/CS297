@@ -119,9 +119,42 @@ export const notifyCommentAddition = new ValidatedMethod({
               $position: 0,
             },
           },
+          $inc: {
+            newNotificationsCount: 1,
+          },
         }
       );
       return notificationId;
+    }
+    // call code on client and server (optimistic UI)
+  },
+});
+
+export const resetNotificationCounter = new ValidatedMethod({
+  name: 'notification.counter.reset',
+  mixins,
+  beforeHooks: [beforeHookExample],
+  afterHooks: [afterHookExample],
+  checkLoggedInError,
+  checkRoles: {
+    roles: ['admin', 'user'],
+    rolesError: {
+      error: 'not-allowed',
+      message: 'You are not allowed to call this method',
+    },
+  },
+  validate: new SimpleSchema({
+    userId: {
+      type: String,
+      optional: false,
+    },
+  }).validator(),
+  run({ userId }) {
+    if (Meteor.isServer) {
+      Meteor.users.update(
+        { _id: userId },
+        { $set: { newNotificationsCount: 0 } }
+      );
     }
     // call code on client and server (optimistic UI)
   },

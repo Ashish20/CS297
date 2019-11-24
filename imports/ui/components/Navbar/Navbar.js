@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor';
-import React from 'react';
+import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Search from '../../pages/Search/Search';
-
-import './Navbar.scss';
 import { USER_TYPE } from '../../../constants';
+import Search from '../../pages/Search/Search';
+import './Navbar.scss';
 
 const PublicNav = () => [
   <li key="login" className="nav-item">
@@ -37,6 +37,13 @@ const SearchBar = () => (
     </button>
   </form>
 );
+const renderNewNotificationCount = newNotificationsCount => {
+  if (newNotificationsCount === 0 || !newNotificationsCount) {
+    console.log('new Notification count = ', newNotificationsCount);
+    return <></>;
+  }
+  return <span className="notif-count">{newNotificationsCount}</span>;
+};
 
 const LoggedInNav = props => (
   <>
@@ -66,9 +73,10 @@ const LoggedInNav = props => (
       </NavLink>
     </li>
     <li className="nav-item">
-      <NavLink to="/notifications/">
+      <NavLink to={`/notifications/${new Date().toString()}`}>
         <button type="button" className="dropdown-item">
           Notifications
+          {renderNewNotificationCount(props.newNotificationsCount)}
         </button>
       </NavLink>
     </li>
@@ -114,6 +122,7 @@ Status.propTypes = {
 
 const Navbar = props => {
   const { loggedIn } = props;
+  const { newNotificationsCount } = props;
   return (
     <nav className="navbar navbar-expand-lg">
       <Status loggedIn={loggedIn} />
@@ -147,6 +156,20 @@ Navbar.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  newNotificationsCount: PropTypes.number.isRequired,
 };
 
-export default Navbar;
+LoggedInNav.propTypes = {
+  loggedIn: PropTypes.bool.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  newNotificationsCount: PropTypes.number.isRequired,
+};
+
+export default withTracker(props => {
+  // const subHandlers = [Meteor.subscribe('user')];
+  const { loggedIn } = props;
+  const newNotificationsCount = loggedIn && Meteor.user().newNotificationsCount;
+  return { newNotificationsCount };
+})(Navbar);

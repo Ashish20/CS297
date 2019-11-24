@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import {
   Avatar,
+  Divider,
   Grid,
   List,
   ListItem,
@@ -8,18 +9,18 @@ import {
   ListItemText,
   Paper,
   Typography,
-  Divider,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Notification from '../../../api/notification/notification';
 import { GET_USER_NOTIFICATIONS } from '../../../api/notification/publications';
+import { resetNotificationCounter } from '../../../api/notification/methods';
 import Spinner from '../../components/Spinner';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,16 +46,21 @@ function NotificationComponent({
   notificationIds,
   propsReady,
   notifications,
+  lastClicked,
 }) {
   const classes = useStyles();
 
-  useEffect(
-    function() {
-      // localStorage.setItem("use-dark-mode", enabled);
-      console.log('useEffect called', notifications);
-    },
-    [notifications]
-  );
+  const [lastReloaded, setLastReloaded] = useState('');
+
+  const resetNewNotificationsCount = () => {
+    resetNotificationCounter.call({ userId: Meteor.userId() });
+  };
+  useEffect(function() {
+    if (Meteor.user() && Meteor.user().roles && lastReloaded !== lastClicked) {
+      resetNewNotificationsCount();
+      setLastReloaded(lastClicked);
+    }
+  });
 
   if (propsReady && notificationIds) {
     return (
@@ -150,18 +156,16 @@ NotificationComponent.propTypes = {
   propsReady: PropTypes.bool.isRequired,
   notifications: PropTypes.arrayOf(PropTypes.any).isRequired,
   notificationIds: PropTypes.arrayOf(PropTypes.String).isRequired,
+  lastClicked: PropTypes.bool.isRequired,
 };
 
 export default withTracker(props => {
+  const { lastClicked } = props;
   const subHandles = [
     Meteor.subscribe('users.sameZip'),
     Meteor.subscribe('issues'),
     Meteor.subscribe('user'),
-    Meteor.subscribe(
-      GET_USER_NOTIFICATIONS,
-      Meteor.userId(),
-      Meteor.user() && Meteor.user().notifications
-    ),
+    Meteor.subscribe(GET_USER_NOTIFICATIONS, Meteor.userId(), lastClicked),
     // Meteor.subscribe('user'),
   ];
   const subsReady = subHandles.every(handle => handle.ready());
@@ -169,16 +173,16 @@ export default withTracker(props => {
   let propsReady = false;
   let notificationIds = null;
   let notifications = null;
+  let newNotificationsCount = 0;
   if (subsReady) {
     notificationIds = Meteor.user().notifications || [];
     notifications = Notification.find(
       { _id: { $in: notificationIds } },
       { sort: { createdOn: -1 } }
     ).fetch();
-    propsReady =
-      notifications.every(notif => !!notif) &&
-      notificationIds.length === notifications.length;
-    if (propsReady) console.log(notifications);
+    newNotificationsCount = Meteor.user().newNotificationsCount;
+    propsReady = notifications.every(notif => !!notif);
+    // if (propsReady) console.log(notifications);
   }
 
   return {
@@ -189,5 +193,7 @@ export default withTracker(props => {
     propsReady,
     notificationIds,
     notifications,
+    newNotificationsCount,
+    lastClicked,
   };
 })(NotificationComponent);
