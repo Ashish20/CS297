@@ -18,7 +18,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { NavLink } from 'react-router-dom';
 import Alert from '../../../components/Alert';
 import { ISSUE_CATEGORIES, USER_TYPE } from '../../../../constants';
-import FileUpload from '../../../components/FileUpload/FileUpload'
+import FileUpload from '../../../components/FileUpload/FileUpload';
 const debug = require('debug')('demo:file');
 
 function Copyright() {
@@ -37,14 +37,21 @@ function Copyright() {
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
-      backgroundColor: theme.palette.common.white,
+      backgroundColor: '#e8eaf6',
     },
   },
   paper: {
+    borderRadius: '10px',
     marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    width: '100%',
+    paddingLeft: '10%',
+    paddingRight: '10%',
+    boxSizing: 'content-box',
+    backgroundColor: '#fafafa',
+    // boxSizing: '',
   },
   avatar: {
     margin: theme.spacing(1),
@@ -127,7 +134,6 @@ function renderRepresentativeComponent({ state, updateState }) {
   );
 }
 
-
 export default function SignUp({ state, updateState, handleSubmit }) {
   const classes = useStyles();
   const inputLabel = React.useRef(null);
@@ -136,10 +142,10 @@ export default function SignUp({ state, updateState, handleSubmit }) {
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
-  
-  fileURL = (url) => {
-    updateState({imageURL : url});
-  }
+
+  fileURL = url => {
+    updateState({ imageURL: url });
+  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -250,13 +256,11 @@ export default function SignUp({ state, updateState, handleSubmit }) {
             </Grid>
           </Grid>
 
-
           <p>Upload Profile Photo:</p>
-          <FileUpload fileURL={fileURL} 
-          // updateState={updateState}
+          <FileUpload
+            fileURL={fileURL}
+            // updateState={updateState}
           />
-
-
 
           {state.errMsg && <Alert errMsg={state.errMsg} />}
           <Button

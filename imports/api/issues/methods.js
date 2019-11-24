@@ -11,6 +11,7 @@ import { LoggedInMixin } from 'meteor/tunifight:loggedin-mixin';
 import SimpleSchema from 'simpl-schema';
 // import Users from '../users';
 import { ISSUE_CATEGORIES, ISSUE_STATE, USER_TYPE } from '../../constants';
+import { notifyCommentAddition } from '../notification/methods';
 import Issues from './issues';
 
 /** **************** Helpers **************** */
@@ -227,6 +228,7 @@ export const issueAddComment = new ValidatedMethod({
     if (Meteor.isServer) {
       const userId = this.userId;
       const userName = Meteor.user().name;
+      const issue = Issues.findOne(issueId);
       const commentObject = {
         author: {
           id: userId,
@@ -234,10 +236,22 @@ export const issueAddComment = new ValidatedMethod({
         },
         content: comment,
       };
-      return Issues.update(
+      const updateStatus = Issues.update(
         { _id: issueId },
         { $push: { comments: commentObject } }
       );
+
+      console.log('Comment add status', updateStatus);
+
+      // notify if others comment on the owner's issue
+      if (this.userId !== issue.owner) {
+        notifyCommentAddition.call({
+          whoCommentedId: userId,
+          onWhoseIssueId: issue.owner,
+          onWhichIssueId: issueId,
+          comment: commentObject,
+        });
+      }
     }
   },
 });

@@ -6,18 +6,14 @@
       text-decoration: none;
     }
   }
-  a {
-    color: #3f51b5;
-  }
-  // .active {
-  //   color: #3f51b5;
-  // }
   .navbar-brand a {
     color: white;
+    font-weight: bolder;
   }
-  .dropdown-item:active {
-    color: #212529;
-    background-color: #fff;
+
+  .dropdown-item {
+    background-color: inherit;
+    color: inherit;
   }
 }
 
@@ -26,9 +22,19 @@ nav {
 }
 
 .navbar li button {
-  color: white;
+  color: inherit;
 }
 
 .nav-item a {
   color: white;
+  :hover {
+    text-decoration: none;
+    background-color: #002984;
+    border-radius: 5px;
+    color: white;
+  }
+}
+
+.nav-item a.active .dropdown-item {
+  font-weight: bold;
 }

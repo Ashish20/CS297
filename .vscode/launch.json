@@ -16,7 +16,7 @@
       "runtimeExecutable": "${workspaceRoot}/.meteor/local/dev_bundle/bin/npm",
       "runtimeArgs": ["run", "debug"],
       "outputCapture": "std",
-      "port": 9229,
+      "port": 9230,
       "timeout": 30000
     }
   ],

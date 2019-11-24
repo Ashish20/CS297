@@ -9,14 +9,18 @@ import { USER_TYPE } from '../../../constants';
 
 const PublicNav = () => [
   <li key="login" className="nav-item">
-    <span className="nav-link">
-      <NavLink to="/login">Login</NavLink>
-    </span>
+    <NavLink to="/login">
+      <button type="button" className="dropdown-item">
+        Login
+      </button>
+    </NavLink>
   </li>,
   <li key="signup" className="nav-item">
-    <span className="nav-link">
-      <NavLink to="/signup">Signup</NavLink>
-    </span>
+    <NavLink to="/signup">
+      <button type="button" className="dropdown-item">
+        Signup
+      </button>
+    </NavLink>
   </li>,
 ];
 
@@ -37,7 +41,7 @@ const SearchBar = () => (
 const LoggedInNav = props => (
   <>
     {Meteor.user().userType === USER_TYPE.REPRESENTATIVE.id && (
-      <li>
+      <li className="nav-item">
         <NavLink to="/Kanban">
           <button type="button" className="dropdown-item">
             Kanban Board
@@ -46,7 +50,7 @@ const LoggedInNav = props => (
       </li>
     )}
     {Meteor.user().userType === USER_TYPE.CITIZEN.id && (
-      <li>
+      <li className="nav-item">
         <NavLink to="/assigned_issues">
           <button type="button" className="dropdown-item">
             Raise Issues
@@ -54,10 +58,17 @@ const LoggedInNav = props => (
         </NavLink>
       </li>
     )}
-    <li>
+    <li className="nav-item">
       <NavLink to="/newsfeed">
         <button type="button" className="dropdown-item">
           News Feed
+        </button>
+      </NavLink>
+    </li>
+    <li className="nav-item">
+      <NavLink to="/notifications/">
+        <button type="button" className="dropdown-item">
+          Notifications
         </button>
       </NavLink>
     </li>
@@ -71,7 +82,7 @@ const LoggedInNav = props => (
     <li className="nav-item">
       <div className="dropdown-divider" />
     </li>
-    <li>
+    <li className="nav-item">
       <NavLink to="/login" onClick={() => Meteor.logout()}>
         <button type="button" className="dropdown-item">
           Logout
