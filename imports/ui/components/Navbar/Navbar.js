@@ -104,7 +104,7 @@ Status.propTypes = {
 const Navbar = props => {
   const { loggedIn } = props;
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg">
       <Status loggedIn={loggedIn} />
       <span className="navbar-brand" href="#">
         <NavLink to="/">PoliTracker</NavLink>

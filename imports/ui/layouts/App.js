@@ -20,48 +20,52 @@ import RecoverPassword from '../pages/RecoverPassword';
 import ResetPassword from '../pages/ResetPassword';
 import AssignedIssues from '../pages/AssignedIssues';
 import NewsFeed from '../pages/NewsFeed';
-import Kanban from '../pages/KanbanBoard'
+import Kanban from '../pages/KanbanBoard';
 
 // import Spinner
 import Spinner from '../components/Spinner';
 
 // import hoc to pass additional props to routes
 import PropsRoute from '../pages/PropsRoute';
+import './App.scss';
 
 const App = props => (
   <Router>
     <div>
       <PropsRoute component={Navbar} {...props} />
       {props.loggingIn && <Spinner />}
-      <Switch>
-        <PropsRoute exact path="/" component={Login} {...props} />
-        <PropsRoute path="/login" component={Login} {...props} />
-        <PropsRoute path="/signup" component={Signup} {...props} />
-        <PropsRoute exact path="/profile" component={Profile} {...props} />
-        <PropsRoute exact path="/profile/:_id" component={Profile} {...props} />
-        <PropsRoute
-          path="/assigned_issues/"
-          component={AssignedIssues}
-          {...props}
-        />
-        <PropsRoute path="/newsfeed" component={NewsFeed} {...props} />
-        <PropsRoute
-          path="/recover-password"
-          component={RecoverPassword}
-          {...props}
-        />
-        <PropsRoute
-          path="/reset-password/:token"
-          component={ResetPassword}
-          {...props}
-        />
-        <PropsRoute
-          path="/Kanban"
-          component={Kanban}
-          {...props}
-        />
-        <PropsRoute component={NotFound} {...props} />
-      </Switch>
+      <div className="appBody">
+        <Switch>
+          <PropsRoute exact path="/" component={Login} {...props} />
+          <PropsRoute path="/login" component={Login} {...props} />
+          <PropsRoute path="/signup" component={Signup} {...props} />
+          <PropsRoute exact path="/profile" component={Profile} {...props} />
+          <PropsRoute
+            exact
+            path="/profile/:_id"
+            component={Profile}
+            {...props}
+          />
+          <PropsRoute
+            path="/assigned_issues/"
+            component={AssignedIssues}
+            {...props}
+          />
+          <PropsRoute path="/newsfeed" component={NewsFeed} {...props} />
+          <PropsRoute
+            path="/recover-password"
+            component={RecoverPassword}
+            {...props}
+          />
+          <PropsRoute
+            path="/reset-password/:token"
+            component={ResetPassword}
+            {...props}
+          />
+          <PropsRoute path="/Kanban" component={Kanban} {...props} />
+          <PropsRoute component={NotFound} {...props} />
+        </Switch>
+      </div>
     </div>
   </Router>
 );

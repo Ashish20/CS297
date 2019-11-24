@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #444;
+  background-color: #3f51b5;
   * {
     :hover,
     :active {
@@ -7,16 +7,28 @@
     }
   }
   a {
-    color: #666;
+    color: #3f51b5;
   }
-  .active {
-    color: #007bff;
-  }
+  // .active {
+  //   color: #3f51b5;
+  // }
   .navbar-brand a {
-    color: #666;
+    color: white;
   }
   .dropdown-item:active {
     color: #212529;
     background-color: #fff;
   }
+}
+
+nav {
+  background-color: #3f51b5;
+}
+
+.navbar li button {
+  color: white;
+}
+
+.nav-item a {
+  color: white;
 }

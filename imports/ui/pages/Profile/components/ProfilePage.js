@@ -26,16 +26,19 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 500,
     marginBottom: '10px',
     marginTop: '10px',
-    alignContent: 'center',
+
+    // backgrounColor: '#e8eaf6',
   },
   media: {
     height: 0,
-    paddingTop: '56.25%',
+    paddingTop: '100%',
   },
 
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+    alignItems: 'center',
+    justifyContents: 'center',
   },
 }));
 
