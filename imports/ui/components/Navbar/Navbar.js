@@ -73,7 +73,7 @@ const LoggedInNav = props => (
       </NavLink>
     </li>
     <li className="nav-item">
-      <NavLink to={`/notifications/${new Date().toString()}`}>
+      <NavLink to={`/notifications/${Date.now()}`}>
         <button type="button" className="dropdown-item">
           Notifications
           {renderNewNotificationCount(props.newNotificationsCount)}
