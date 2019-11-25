@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import navbar
 import Navbar from '../components/Navbar';
 // import Spinner
@@ -58,7 +58,7 @@ const App = props => (
             {...props}
           />
           <PropsRoute path="/Kanban" component={Kanban} {...props} />
-          <PropsRoute
+          <Route
             path="/notifications/:lastClicked"
             component={Notifications}
             {...{ props }}
