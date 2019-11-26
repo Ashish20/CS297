@@ -6,7 +6,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Popper from '@material-ui/core/Popper';
 import { withStyles } from '@material-ui/core/styles';
-import Meteor from 'meteor/meteor';
 import React from 'react';
 import { ISSUE_STATE, USER_TYPE } from '../../../constants';
 
@@ -83,19 +82,21 @@ export default function SplitButton({
     setOpen(false);
   };
 
-  const renderSelected = () => {
+  const renderSelected = onClick => {
     switch (selectedIndex) {
       case ISSUE_STATE.BACKLOG.id: {
-        return <BacklogChip label={ISSUE_STATE.BACKLOG.id} />;
+        return <BacklogChip onClick={onClick} label={ISSUE_STATE.BACKLOG.id} />;
       }
       case ISSUE_STATE.INPROGRESS.id: {
-        return <InProgressChip label={ISSUE_STATE.INPROGRESS.id} />;
+        return (
+          <InProgressChip onClick={onClick} label={ISSUE_STATE.INPROGRESS.id} />
+        );
       }
       case ISSUE_STATE.TODO.id: {
-        return <TodoChip label={ISSUE_STATE.TODO.id} />;
+        return <TodoChip onClick={onClick} label={ISSUE_STATE.TODO.id} />;
       }
       case ISSUE_STATE.DONE.id: {
-        return <DoneChip label={ISSUE_STATE.DONE.id} />;
+        return <DoneChip onClick={onClick} label={ISSUE_STATE.DONE.id} />;
       }
       default: {
         return '';
@@ -115,16 +116,12 @@ export default function SplitButton({
           <Button onClick={handleToggle}>{selectedIndex}</Button>
         </ButtonGroup> */}
         <List>
-          <ListItem
-            onClick={
+          <ListItem ref={anchorRef} variant="extended">
+            {renderSelected(
               userType === USER_TYPE.REPRESENTATIVE && assignedTo === userId
                 ? handleToggle
                 : undefined
-            }
-            ref={anchorRef}
-            variant="extended"
-          >
-            {renderSelected()}
+            )}
           </ListItem>
         </List>
 

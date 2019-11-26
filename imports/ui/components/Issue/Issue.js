@@ -133,7 +133,8 @@ function Issue({
             </Grid>
             <Grid item>
               <NavLink to={`/profile/${issue.assignedTo}`}>
-                {issue.assigneeName || issue.assignedTo}
+                {issue.assigneeName || issue.assignedTo}{' '}
+                {/*Need to delete issue.assignedTo */}
               </NavLink>
             </Grid>
           </Grid>
@@ -142,12 +143,12 @@ function Issue({
       />
 
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography variant="h6" component="p">
           {issue.title}
         </Typography>
       </CardContent>
       <CardContent>
-        <Typography>{issue.description}</Typography>
+        <Typography variant="body1">{issue.description}</Typography>
       </CardContent>
       {issue.imageURL && (
         <CardMedia className={classes.media} image={imagePath} />

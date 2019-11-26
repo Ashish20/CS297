@@ -44,3 +44,5 @@ aldeed:schema-deny
 aldeed:schema-index
 ostrio:files
 email
+dburles:collection-helpers
+reywood:publish-composite

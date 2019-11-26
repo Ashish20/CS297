@@ -50,9 +50,7 @@ class NewsFeed extends React.Component {
           </React.Fragment>
         </Grid>
 
-        <Grid item xs={3}>
-          <Paper> Placeholder for some other content</Paper>
-        </Grid>
+        <Grid item xs={3} />
       </Grid>
     );
   }

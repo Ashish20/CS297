@@ -31,6 +31,8 @@ if (Meteor.isServer) {
             assignedIssues: 1,
             ownedIssues: 1,
             imageURL: 1,
+            notifications: 1,
+            newNotificationsCount: 1,
           },
         }
       );
@@ -44,7 +46,7 @@ if (Meteor.isServer) {
       const user = Meteor.users.findOne(this.userId);
       // if (user.friendIds) {
       return Meteor.users.find(
-        { zip: user.zip, userType: USER_TYPE.REPRESENTATIVE.id },
+        { zip: user.zip },
         {
           fields: {
             emails: 1,

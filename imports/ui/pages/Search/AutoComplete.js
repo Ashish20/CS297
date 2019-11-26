@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Highlight, connectAutoComplete } from 'react-instantsearch-dom';
 import AutoSuggest from 'react-autosuggest';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 
 class AutoComplete extends Component {
   static propTypes = {
@@ -48,7 +48,7 @@ class AutoComplete extends Component {
     const { value } = this.state;
 
     const inputProps = {
-      placeholder: 'Search for a representative',
+      placeholder: 'Search user',
       onChange: this.onChange,
       value,
     };
@@ -61,6 +61,7 @@ class AutoComplete extends Component {
         onSuggestionSelected={onSuggestionSelected}
         getSuggestionValue={this.getSuggestionValue}
         renderSuggestion={this.renderSuggestion}
+        // theme={theme}
         inputProps={inputProps}
       />
     );

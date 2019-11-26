@@ -1,22 +1,26 @@
 import { Meteor } from 'meteor/meteor';
-import React from 'react';
+import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Search from '../../pages/Search/Search';
-
-import './Navbar.scss';
 import { USER_TYPE } from '../../../constants';
+import Search from '../../pages/Search/Search';
+import './Navbar.scss';
 
 const PublicNav = () => [
   <li key="login" className="nav-item">
-    <span className="nav-link">
-      <NavLink to="/login">Login</NavLink>
-    </span>
+    <NavLink to="/login">
+      <button type="button" className="dropdown-item">
+        Login
+      </button>
+    </NavLink>
   </li>,
   <li key="signup" className="nav-item">
-    <span className="nav-link">
-      <NavLink to="/signup">Signup</NavLink>
-    </span>
+    <NavLink to="/signup">
+      <button type="button" className="dropdown-item">
+        Signup
+      </button>
+    </NavLink>
   </li>,
 ];
 
@@ -33,11 +37,25 @@ const SearchBar = () => (
     </button>
   </form>
 );
+const renderNewNotificationCount = newNotificationsCount => {
+  if (newNotificationsCount === 0 || !newNotificationsCount) {
+    console.log('new Notification count = ', newNotificationsCount);
+    return <></>;
+  }
+  return <span className="notif-count">{newNotificationsCount}</span>;
+};
 
 const LoggedInNav = props => (
   <>
+    <li className="nav-item">
+      <NavLink to="/newsfeed">
+        <button type="button" className="dropdown-item">
+          News Feed
+        </button>
+      </NavLink>
+    </li>
     {Meteor.user().userType === USER_TYPE.REPRESENTATIVE.id && (
-      <li>
+      <li className="nav-item">
         <NavLink to="/Kanban">
           <button type="button" className="dropdown-item">
             Kanban Board
@@ -46,7 +64,7 @@ const LoggedInNav = props => (
       </li>
     )}
     {Meteor.user().userType === USER_TYPE.CITIZEN.id && (
-      <li>
+      <li className="nav-item">
         <NavLink to="/assigned_issues">
           <button type="button" className="dropdown-item">
             Raise Issues
@@ -54,10 +72,11 @@ const LoggedInNav = props => (
         </NavLink>
       </li>
     )}
-    <li>
-      <NavLink to="/newsfeed">
+    <li className="nav-item">
+      <NavLink to={`/notifications/${Date.now()}`}>
         <button type="button" className="dropdown-item">
-          News Feed
+          Notifications
+          {renderNewNotificationCount(props.newNotificationsCount)}
         </button>
       </NavLink>
     </li>
@@ -71,7 +90,7 @@ const LoggedInNav = props => (
     <li className="nav-item">
       <div className="dropdown-divider" />
     </li>
-    <li>
+    <li className="nav-item">
       <NavLink to="/login" onClick={() => Meteor.logout()}>
         <button type="button" className="dropdown-item">
           Logout
@@ -103,9 +122,10 @@ Status.propTypes = {
 
 const Navbar = props => {
   const { loggedIn } = props;
+  const { newNotificationsCount } = props;
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Status loggedIn={loggedIn} />
+    <nav className="navbar navbar-expand-lg">
+      {/* <Status loggedIn={loggedIn} /> */}
       <span className="navbar-brand" href="#">
         <NavLink to="/">PoliTracker</NavLink>
       </span>
@@ -136,6 +156,20 @@ Navbar.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  newNotificationsCount: PropTypes.number.isRequired,
 };
 
-export default Navbar;
+LoggedInNav.propTypes = {
+  loggedIn: PropTypes.bool.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  newNotificationsCount: PropTypes.number.isRequired,
+};
+
+export default withTracker(props => {
+  // const subHandlers = [Meteor.subscribe('user')];
+  const { loggedIn } = props;
+  const newNotificationsCount = loggedIn && Meteor.user().newNotificationsCount;
+  return { newNotificationsCount };
+})(Navbar);
