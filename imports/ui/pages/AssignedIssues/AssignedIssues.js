@@ -37,6 +37,7 @@ class AssignedIssues extends React.Component {
       uploading: [],
       progress: 0,
       inProgress: false,
+      resetFile: null,
     };
     this.state = this.initialState;
   }
@@ -161,6 +162,7 @@ class AssignedIssues extends React.Component {
       assignedTo,
       imageURL,
     });
+    this.state.resetFile.call();
     this.reset();
   };
 
@@ -168,8 +170,9 @@ class AssignedIssues extends React.Component {
     this.setState(this.initialState);
   }
 
-  fileURL = url => {
-    this.setState({ imageURL: url });
+  // let resetFile = null;
+  fileURL = (url, clearFile) => {
+    this.setState({ imageURL: url, resetFile: clearFile });
   };
 
   // updateState = (newstate) => {

@@ -5,6 +5,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { USER_TYPE, ISSUE_STATE } from '../../../constants';
 import Spinner from '../../components/Spinner'; 
 import {issueUpdateState} from '../../../api/issues/methods';
+import '../../../api/issues/methods'
 
 class App extends React.Component {
     
@@ -14,6 +15,14 @@ class App extends React.Component {
 
     handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails) {
       issueUpdateState.call({issueId:cardId, newState:targetLaneId});
+
+      Meteor.call(
+        'sendEmail',
+        'Abhijeet <abhijeetb9890@gmail.com>',
+        'abhute@uci.edu',
+        'Hello from Meteor!',
+        'This is a test of Email.send.'
+      );
     }
   
   render() {
@@ -137,3 +146,7 @@ export default withTracker(()=> {
         backlog, todo, inProgress, completed, propsReady
     };
 })(App);
+
+Meteor.methods({
+
+});
