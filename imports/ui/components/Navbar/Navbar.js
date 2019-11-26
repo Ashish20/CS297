@@ -47,6 +47,13 @@ const renderNewNotificationCount = newNotificationsCount => {
 
 const LoggedInNav = props => (
   <>
+    <li className="nav-item">
+      <NavLink to="/newsfeed">
+        <button type="button" className="dropdown-item">
+          News Feed
+        </button>
+      </NavLink>
+    </li>
     {Meteor.user().userType === USER_TYPE.REPRESENTATIVE.id && (
       <li className="nav-item">
         <NavLink to="/Kanban">
@@ -65,13 +72,6 @@ const LoggedInNav = props => (
         </NavLink>
       </li>
     )}
-    <li className="nav-item">
-      <NavLink to="/newsfeed">
-        <button type="button" className="dropdown-item">
-          News Feed
-        </button>
-      </NavLink>
-    </li>
     <li className="nav-item">
       <NavLink to={`/notifications/${Date.now()}`}>
         <button type="button" className="dropdown-item">
@@ -125,7 +125,7 @@ const Navbar = props => {
   const { newNotificationsCount } = props;
   return (
     <nav className="navbar navbar-expand-lg">
-      <Status loggedIn={loggedIn} />
+      {/* <Status loggedIn={loggedIn} /> */}
       <span className="navbar-brand" href="#">
         <NavLink to="/">PoliTracker</NavLink>
       </span>

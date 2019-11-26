@@ -240,10 +240,22 @@ export default withTracker(props => {
   let myIssues = null;
 
   if (propsReady) {
-    backlogCount = Issues.find({ state: ISSUE_STATE.BACKLOG.id }).count();
-    todoCount = Issues.find({ state: ISSUE_STATE.TODO.id }).count();
-    inProgressCount = Issues.find({ state: ISSUE_STATE.INPROGRESS.id }).count();
-    completedCount = Issues.find({ state: ISSUE_STATE.DONE.id }).count();
+    backlogCount = Issues.find({
+      state: ISSUE_STATE.BACKLOG.id,
+      assignedTo: props.userId,
+    }).count();
+    todoCount = Issues.find({
+      state: ISSUE_STATE.TODO.id,
+      assignedTo: props.userId,
+    }).count();
+    inProgressCount = Issues.find({
+      state: ISSUE_STATE.INPROGRESS.id,
+      assignedTo: props.userId,
+    }).count();
+    completedCount = Issues.find({
+      state: ISSUE_STATE.DONE.id,
+      assignedTo: props.userId,
+    }).count();
     user = Meteor.users.findOne({ _id: props.userId });
     imageURL = user.imageURL;
     myIssues = Issues.find(
