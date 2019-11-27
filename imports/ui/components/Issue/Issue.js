@@ -81,7 +81,11 @@ function Issue({
     issue.upVoters && issue.upVoters.includes(Meteor.userId())
   );
 
-  const upVotes = issue.upVoters ? issue.upVoters.length : 0;
+  const [upVotes, setUpvotes] = React.useState(
+    issue.upVoters ? issue.upVoters.length : 0
+  );
+
+  // const upVotes = issue.upVoters ? issue.upVoters.length : 0;
 
   console.log('In Recipe', issueId);
 
@@ -94,12 +98,13 @@ function Issue({
     event.preventDefault();
     issueToggleUpVote.call({ issueId });
     setIsUpvote(!isUpvoted);
+    setUpvotes(!isUpvoted ? upVotes + 1 : upVotes - 1);
   };
   // const name = user.name.substring(0, 1);
   // console.log(typeof name);
   // console.log(name);
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} key={issue._id}>
       <CardHeader
         className={classes.action}
         avatar={

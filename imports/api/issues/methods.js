@@ -11,7 +11,11 @@ import { LoggedInMixin } from 'meteor/tunifight:loggedin-mixin';
 import SimpleSchema from 'simpl-schema';
 // import Users from '../users';
 import { ISSUE_CATEGORIES, ISSUE_STATE, USER_TYPE } from '../../constants';
-import { notifyCommentAddition } from '../notification/methods';
+import {
+  notifyCommentAddition,
+  notifyUpvote,
+  undoNotifyUpvote,
+} from '../notification/methods';
 import Issues from './issues';
 import {Email} from 'meteor/email';
 /** **************** Helpers **************** */
@@ -200,10 +204,24 @@ export const issueToggleUpVote = new ValidatedMethod({
     if (Meteor.isServer) {
       const userId = this.userId;
       const issue = Issues.findOne(issueId);
-      if (issue.upVoters && issue.upVoters.includes(userId)) {
+      if (issue.upVoters.includes(userId)) {
         Issues.update({ _id: issueId }, { $pull: { upVoters: userId } });
+        if (this.userId !== issue.owner) {
+          undoNotifyUpvote.call({
+            whoUpvotedId: userId,
+            onWhoseIssueId: issue.owner,
+            onWhichIssueId: issue._id,
+          });
+        }
       } else {
         Issues.update({ _id: issueId }, { $addToSet: { upVoters: userId } });
+        if (this.userId !== issue.owner) {
+          notifyUpvote.call({
+            whoUpvotedId: userId,
+            onWhoseIssueId: issue.owner,
+            onWhichIssueId: issue._id,
+          });
+        }
       }
     }
   },

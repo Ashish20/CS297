@@ -44,6 +44,7 @@ class NewsFeed extends React.Component {
               <Issue
                 issueId={issue._id}
                 issue={issue}
+                key={issue._id}
                 // onDragStop={this.onDragStop}
               />
             ))}
@@ -77,9 +78,9 @@ export default withTracker(() => {
   // issues example
   const issuesSub = Meteor.subscribe('issues.samezip');
   const feedIssues = Issues.find({}, { sort: { createdOn: -1 } }).fetch();
-  feedIssues.sort(function(a, b) {
-    return b.upVoters.length - a.upVoters.length;
-  });
+  // feedIssues.sort(function(a, b) {
+  //   return b.upVoters.length - a.upVoters.length;
+  // });
 
   console.log('FeedIssues', feedIssues);
   const issuesReady = issuesSub.ready() && !!feedIssues;

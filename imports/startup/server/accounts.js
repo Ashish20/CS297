@@ -25,6 +25,8 @@ Accounts.onCreateUser((options, user) => {
     assignedIssues: [],
     ownedIssues: [],
     imageURL: options.profile.imageURL,
+    notifications: [],
+    newNotificationsCount: 0,
   };
 
   return userDetails;

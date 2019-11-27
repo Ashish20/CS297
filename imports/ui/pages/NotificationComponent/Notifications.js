@@ -77,7 +77,7 @@ Notifications.propTypes = {
 };
 
 export default withTracker(props => {
-  const { lastClicked } = props;
+  const { lastClicked } = props.match.params;
   const subHandles = [
     Meteor.subscribe('users.sameZip'),
     Meteor.subscribe('issues'),
@@ -98,7 +98,7 @@ export default withTracker(props => {
   }
 
   return {
-    lastClicked: props.match.params.lastClicked,
+    lastClicked,
     propsReady,
     notifications,
   };

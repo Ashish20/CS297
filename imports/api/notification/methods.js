@@ -71,11 +71,6 @@ export const notifyCommentAddition = new ValidatedMethod({
       type: String,
       optional: false,
     },
-    comment: {
-      type: Object,
-      blackbox: true,
-      optional: false,
-    },
   }).validator(),
   run({ whoCommentedId, onWhoseIssueId, onWhichIssueId, comment }) {
     if (Meteor.isServer) {
@@ -92,7 +87,7 @@ export const notifyCommentAddition = new ValidatedMethod({
       if (!onWhichIssue)
         throw new Meteor.Error('Invalid issue', onWhichIssueId);
 
-      if (!this.userId && whoCommented._id) {
+      if (!this.userId) {
         // secure code - not available on the client
         throw new Meteor.Error('not-authorized');
       }
@@ -155,6 +150,191 @@ export const resetNotificationCounter = new ValidatedMethod({
         { _id: userId },
         { $set: { newNotificationsCount: 0 } }
       );
+    }
+    // call code on client and server (optimistic UI)
+  },
+});
+
+export const notifyUpvote = new ValidatedMethod({
+  name: 'notification.newUpvote',
+  mixins,
+  beforeHooks: [beforeHookExample],
+  afterHooks: [afterHookExample],
+  checkLoggedInError,
+  checkRoles: {
+    roles: ['admin', 'user'],
+    rolesError: {
+      error: 'not-allowed',
+      message: 'You are not allowed to call this method',
+    },
+  },
+  validate: new SimpleSchema({
+    whoUpvotedId: {
+      type: String,
+      optional: false,
+    },
+    onWhoseIssueId: {
+      type: String,
+      optional: false,
+    },
+    onWhichIssueId: {
+      type: String,
+      optional: false,
+    },
+  }).validator(),
+  run({ whoUpvotedId, onWhoseIssueId, onWhichIssueId, comment }) {
+    if (Meteor.isServer) {
+      const whoUpvoted = Meteor.users.findOne(whoUpvotedId);
+      const onWhoseIssue = Meteor.users.findOne(onWhoseIssueId);
+      const onWhichIssue = Issues.findOne(onWhichIssueId);
+
+      if (!whoUpvotedId)
+        throw new Meteor.Error('Invalid upvoter', whoUpvotedId);
+
+      if (!onWhoseIssue)
+        throw new Meteor.Error('Invalid owner', onWhoseIssueId);
+
+      if (!onWhichIssue)
+        throw new Meteor.Error('Invalid issue', onWhichIssueId);
+
+      if (!this.userId) {
+        // secure code - not available on the client
+        throw new Meteor.Error('not-authorized');
+      }
+      if (onWhoseIssue._id !== onWhichIssue.owner) {
+        throw new Meteor.Error('invalid data');
+      }
+
+      const notificationId = Notification.insert({
+        category: NOTIFICATION_CATEGORIES.UPVOTE.id,
+        message: `${whoUpvoted.name} upvoted issue ${onWhichIssue.title}`,
+        actorId: whoUpvotedId,
+        subjectId: onWhoseIssueId,
+        targetId: onWhichIssueId,
+        // comment,
+      });
+      Meteor.users.update(
+        { _id: onWhoseIssueId },
+        {
+          $push: {
+            notifications: {
+              $each: [notificationId],
+              $position: 0,
+            },
+          },
+          $inc: {
+            newNotificationsCount: 1,
+          },
+        }
+      );
+      console.log('UPVOTE', onWhoseIssue.notifications);
+      console.log('UPVOTE', notificationId);
+      return notificationId;
+    }
+    // call code on client and server (optimistic UI)
+  },
+});
+
+export const undoNotifyUpvote = new ValidatedMethod({
+  name: 'notification.newUpvote.Undo',
+  mixins,
+  beforeHooks: [beforeHookExample],
+  afterHooks: [afterHookExample],
+  checkLoggedInError,
+  checkRoles: {
+    roles: ['admin', 'user'],
+    rolesError: {
+      error: 'not-allowed',
+      message: 'You are not allowed to call this method',
+    },
+  },
+  validate: new SimpleSchema({
+    whoUpvotedId: {
+      type: String,
+      optional: false,
+    },
+    onWhoseIssueId: {
+      type: String,
+      optional: false,
+    },
+    onWhichIssueId: {
+      type: String,
+      optional: false,
+    },
+  }).validator(),
+  run({ whoUpvotedId, onWhoseIssueId, onWhichIssueId }) {
+    if (Meteor.isServer) {
+      const whoUpvoted = Meteor.users.findOne(whoUpvotedId);
+      const onWhoseIssue = Meteor.users.findOne(onWhoseIssueId);
+      const onWhichIssue = Issues.findOne(onWhichIssueId);
+
+      if (!whoUpvotedId)
+        throw new Meteor.Error('Invalid upvoter', whoUpvotedId);
+
+      if (!onWhoseIssue)
+        throw new Meteor.Error('Invalid owner', onWhoseIssueId);
+
+      if (!onWhichIssue)
+        throw new Meteor.Error('Invalid issue', onWhichIssueId);
+
+      if (!this.userId) {
+        // secure code - not available on the client
+        throw new Meteor.Error('not-authorized');
+      }
+      if (onWhoseIssue._id !== onWhichIssue.owner) {
+        throw new Meteor.Error('invalid data');
+      }
+
+      if (!whoUpvoted) {
+        throw new Meteor.Error('invalid data');
+      }
+
+      const notificationId = Notification.findOne({
+        category: NOTIFICATION_CATEGORIES.UPVOTE.id,
+        // message: `${whoUpvoted.name} upvoted issue ${onWhichIssue.title}`,
+        actorId: whoUpvotedId,
+        subjectId: onWhoseIssueId,
+        targetId: onWhichIssueId,
+      })._id;
+
+      // console.log(notificationId);
+      // console.log(Meteor.user());
+      const indexOfNotificationId = onWhoseIssue.notifications.indexOf(
+        notificationId
+      );
+
+      console.log(indexOfNotificationId);
+      const unOpenedNotificationCount = onWhoseIssue.newNotificationsCount;
+
+      if (indexOfNotificationId < unOpenedNotificationCount) {
+        console.log('unseen notice');
+        Meteor.users.update(
+          { _id: onWhoseIssueId },
+          {
+            $pull: {
+              notifications: notificationId,
+            },
+            $inc: {
+              newNotificationsCount: -1,
+            },
+          }
+        );
+      } else {
+        console.log('seen notice');
+        Meteor.users.update(
+          { _id: onWhoseIssueId },
+          {
+            $pull: {
+              notifications: notificationId,
+            },
+          }
+        );
+      }
+
+      Notification.remove({ _id: notificationId });
+      console.log('DOwnVote', onWhoseIssue.notifications);
+
+      return notificationId;
     }
     // call code on client and server (optimistic UI)
   },

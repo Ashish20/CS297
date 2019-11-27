@@ -15,6 +15,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import TransitionsModal from '../../components/TransitionModal/TransitionModal';
 import Issue from '../../components/Issue/Issue';
+import { NOTIFICATION_CATEGORIES } from '../../../constants';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,6 +43,34 @@ function NotificationComponent({ notification }) {
 
   const commenter = notification.actor();
   const issue = notification.target();
+
+  const renderMessage = notification => {
+    let message = null;
+    switch (notification.category) {
+      case NOTIFICATION_CATEGORIES.COMMENT.id:
+        message = 'commented on';
+        break;
+      case NOTIFICATION_CATEGORIES.UPVOTE.id:
+        message = 'upvoted';
+        break;
+      case NOTIFICATION_CATEGORIES.ISSUE_STATE_CHANGE.id:
+        message = 'changed state of issue ';
+        break;
+      default:
+        message = 'invalid notification';
+        break;
+    }
+    return (
+      <Typography
+        // className={classes.inline}
+        variant="body2"
+        color="textSecondary"
+      >
+        {`${message} '${issue.title}'`}
+      </Typography>
+    );
+  };
+
   return (
     <>
       <ListItem
@@ -75,13 +104,7 @@ function NotificationComponent({ notification }) {
               >
                 {new Date(notification.createdOn).toDateString()}
               </Typography>
-              <Typography
-                // className={classes.inline}
-                variant="body2"
-                color="textSecondary"
-              >
-                {`commented on '${issue.title}'`}
-              </Typography>
+              {renderMessage(notification)}
             </React.Fragment>
           }
           secondary={
@@ -92,7 +115,7 @@ function NotificationComponent({ notification }) {
                 className={classes.inline}
                 color="textPrimary"
               >
-                {`${notification.comment.content}`}
+                {notification.comment && `${notification.comment.content}`}
               </Typography>
             </React.Fragment>
           }
