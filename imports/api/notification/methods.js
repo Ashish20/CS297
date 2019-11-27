@@ -429,3 +429,75 @@ export const notifyStateChange = new ValidatedMethod({
     }
   },
 });
+
+export const notifyIssueAssignment = new ValidatedMethod({
+  name: 'notification.issue.assignment',
+  mixins,
+  beforeHooks: [beforeHookExample],
+  afterHooks: [afterHookExample],
+  checkLoggedInError,
+  checkRoles: {
+    roles: ['admin', 'user'],
+    rolesError: {
+      error: 'not-allowed',
+      message: 'You are not allowed to call this method',
+    },
+  },
+  validate: new SimpleSchema({
+    whoAssignedId: {
+      type: String,
+      optional: false,
+    },
+    toWhomId: {
+      type: String,
+      optional: false,
+    },
+    whichIssueId: {
+      type: String,
+      optional: false,
+    },
+  }).validator(),
+  run({ whoAssignedId, toWhomId, whichIssueId }) {
+    if (Meteor.isServer) {
+      const whoAssigned = Meteor.users.findOne(whoAssignedId);
+      const toWhom = Meteor.users.findOne(toWhomId);
+      const whichIssue = Issues.findOne(whichIssueId);
+
+      if (!whoAssigned)
+        throw new Meteor.Error('Invalid commenter', whoAssignedId);
+
+      if (!toWhom || toWhom.userType !== USER_TYPE.REPRESENTATIVE.id)
+        throw new Meteor.Error('Invalid owner', toWhomId);
+
+      if (!whichIssue) throw new Meteor.Error('Invalid issue', whichIssueId);
+
+      if (!this.userId) {
+        // secure code - not available on the client
+        throw new Meteor.Error('not-authorized');
+      }
+
+      const notificationId = Notification.insert({
+        category: NOTIFICATION_CATEGORIES.ISSUE_ASSIGNED.id,
+        message: `${whoAssigned.name} assigned new issue ${whichIssue.title}`,
+        actorId: whoAssignedId,
+        subjectId: toWhomId,
+        targetId: whichIssueId,
+      });
+      Meteor.users.update(
+        { _id: toWhomId },
+        {
+          $push: {
+            notifications: {
+              $each: [notificationId],
+              $position: 0,
+            },
+          },
+          $inc: {
+            newNotificationsCount: 1,
+          },
+        }
+      );
+      return notificationId;
+    }
+  },
+});

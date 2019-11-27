@@ -58,6 +58,9 @@ function NotificationComponent({ notification }) {
           notification.issueStateChange.oldState
         }' to '${notification.issueStateChange.newState}' for issue `;
         break;
+      case NOTIFICATION_CATEGORIES.ISSUE_ASSIGNED.id:
+        message = `posted you a new issue  `;
+        break;
       default:
         message = 'invalid notification';
         break;

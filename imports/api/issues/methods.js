@@ -16,9 +16,10 @@ import {
   notifyUpvote,
   undoNotifyUpvote,
   notifyStateChange,
+  notifyIssueAssignment,
 } from '../notification/methods';
 import Issues from './issues';
-import {Email} from 'meteor/email';
+import { Email } from 'meteor/email';
 /** **************** Helpers **************** */
 
 const mixins = [LoggedInMixin, MethodHooks, CallPromiseMixin];
@@ -94,13 +95,12 @@ export const issueCreate = new ValidatedMethod({
   // }).validator()
   run({ category, title, description, location, assignedTo, imageURL }) {
     if (Meteor.isServer) {
-      // secure code - not available on the client
       if (!this.userId) {
         throw new Meteor.Error('not-authorized');
       }
-      console.log('running insert method');
       const ownerName = Meteor.user().name;
-      const assigneeName = Meteor.users.findOne(assignedTo).name;
+      const representative = Meteor.users.findOne(assignedTo);
+      const assigneeName = representative.name;
       const ownerId = this.userId;
       const upVoters = [];
       const issueId = Issues.insert({
@@ -118,15 +118,17 @@ export const issueCreate = new ValidatedMethod({
         { _id: ownerId },
         { $push: { ownedIssues: issueId } }
       );
-      console.log(issueId);
+      notifyIssueAssignment.call({
+        whoAssignedId: ownerId,
+        toWhomId: representative._id,
+        whichIssueId: issueId,
+      });
       return issueId;
     }
 
     // call code on client and server (optimistic UI)
   },
 });
-
-
 
 // export const issueUpdate = new ValidatedMethod({
 //   name: 'issues.update',
@@ -340,30 +342,25 @@ export const issueDelete = new ValidatedMethod({
 //   },
 // });
 if (Meteor.isServer) {
+  Meteor.methods({
+    sendEmail(to, from, subject, text) {
+      // Make sure that all arguments are strings.
+      // check([to, from, subject, text], [String]);
 
+      // Let other method calls from the same client start running, without
+      // waiting for the email sending to complete.
+      this.unblock();
 
-Meteor.methods({
-  sendEmail(to, from, subject, text) {
-    // Make sure that all arguments are strings.
-    // check([to, from, subject, text], [String]);
+      console.log('send email called');
 
-    // Let other method calls from the same client start running, without
-    // waiting for the email sending to complete.
-    this.unblock();
+      console.log('to', to);
+      console.log('from', from);
+      console.log('subject', subject);
+      console.log('text', text);
 
-    console.log('send email called');
+      const status = Email.send({ to, from, subject, text });
 
-    console.log('to', to);
-    console.log('from', from);
-    console.log('subject', subject);
-    console.log('text', text);
-
-
-    const status = Email.send({ to, from, subject, text });
-
-    console.log('Send email status', status);
-  }
-});
-
-
+      console.log('Send email status', status);
+    },
+  });
 }

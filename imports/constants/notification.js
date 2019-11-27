@@ -5,6 +5,10 @@ const NOTIFICATION_CATEGORIES = Object.freeze({
     id: 'ISSUE_STATE_CHANGE',
     name: 'Issue state changed',
   },
+  ISSUE_ASSIGNED: {
+    id: 'ISSUE_ASSIGNED',
+    name: 'New issue assigned',
+  },
 });
 
 const NOTIFICATION_STATE = Object.freeze({
