@@ -23,7 +23,12 @@ class FileUploadComponent extends Component {
     this.uploadIt = this.uploadIt.bind(this);
   }
 
-  uploadIt(e, fileURL) {
+  clearFile = () => {
+     // Remove the filename from the upload box
+     this.refs['fileinput'].value = '';
+  }
+
+  uploadIt(e, fileURL, clearFile) {
     e.preventDefault();
 
     let self = this;
@@ -58,15 +63,12 @@ class FileUploadComponent extends Component {
         uploadInstance.on('end', function (error, fileObj) {
           console.log('On end File Object: ', fileObj);
           // const insertedFile = UserFiles.findOne({_id: fileObj._id}).link();
-          fileURL(fileObj._id);
+          fileURL(fileObj._id, clearFile);
           // updateState({imageURL: fileObj._id})
         })
 
         uploadInstance.on('uploaded', function (error, fileObj) {
-          console.log('uploaded: ', fileObj);
-
-          // Remove the filename from the upload box
-          self.refs['fileinput'].value = '';
+          console.log('uploaded: ', fileObj);         
 
           // Reset our state for the next file
           self.setState({
@@ -74,6 +76,8 @@ class FileUploadComponent extends Component {
             progress: 0,
             inProgress: false
           });
+
+
         })
 
         uploadInstance.on('error', function (error, fileObj) {
@@ -119,7 +123,7 @@ class FileUploadComponent extends Component {
   //   fileURL : PropTypes.string.isRequired
   // }
   handleUpload(event, fileUrl) {
-      this.uploadIt(event, fileUrl);
+      this.uploadIt(event, fileUrl, this.clearFile);
     
   }
 
@@ -151,7 +155,15 @@ class FileUploadComponent extends Component {
         <div className="row">
           <div className="col-md-12">
             {/* <p>Upload Image:</p> */}
-            <input type="file" id="fileinput" disabled={this.state.inProgress} ref="fileinput"
+
+
+            {/* <button  class="btn btn-default">Upload</button>
+            <div style={{visibility: hidden}, {position: absolute}, {overflow: hidden}, {width: 0}, {height:0}, {border:none}, {margin:0}, {padding:0}}>
+              <input type="file"  ng2FileSelect />
+            </div> */}
+
+
+            <input type="file"  id="fileinput" disabled={this.state.inProgress} ref="fileinput"
                  onChange={e => this.handleUpload(e, this.props.fileURL)}/>
           </div>
         </div>

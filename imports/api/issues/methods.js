@@ -13,7 +13,7 @@ import SimpleSchema from 'simpl-schema';
 import { ISSUE_CATEGORIES, ISSUE_STATE, USER_TYPE } from '../../constants';
 import { notifyCommentAddition } from '../notification/methods';
 import Issues from './issues';
-
+import {Email} from 'meteor/email';
 /** **************** Helpers **************** */
 
 const mixins = [LoggedInMixin, MethodHooks, CallPromiseMixin];
@@ -120,6 +120,8 @@ export const issueCreate = new ValidatedMethod({
     // call code on client and server (optimistic UI)
   },
 });
+
+
 
 // export const issueUpdate = new ValidatedMethod({
 //   name: 'issues.update',
@@ -305,3 +307,31 @@ export const issueDelete = new ValidatedMethod({
 //     return counterId;
 //   },
 // });
+if (Meteor.isServer) {
+
+
+Meteor.methods({
+  sendEmail(to, from, subject, text) {
+    // Make sure that all arguments are strings.
+    // check([to, from, subject, text], [String]);
+
+    // Let other method calls from the same client start running, without
+    // waiting for the email sending to complete.
+    this.unblock();
+
+    console.log('send email called');
+
+    console.log('to', to);
+    console.log('from', from);
+    console.log('subject', subject);
+    console.log('text', text);
+
+
+    const status = Email.send({ to, from, subject, text });
+
+    console.log('Send email status', status);
+  }
+});
+
+
+}

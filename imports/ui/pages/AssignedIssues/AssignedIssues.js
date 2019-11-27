@@ -37,6 +37,7 @@ class AssignedIssues extends React.Component {
       uploading: [],
       progress: 0,
       inProgress: false,
+      resetFile: null,
     };
     this.state = this.initialState;
   }
@@ -161,6 +162,7 @@ class AssignedIssues extends React.Component {
       assignedTo,
       imageURL,
     });
+    this.state.resetFile.call();
     this.reset();
   };
 
@@ -168,8 +170,9 @@ class AssignedIssues extends React.Component {
     this.setState(this.initialState);
   }
 
-  fileURL = url => {
-    this.setState({ imageURL: url });
+  // let resetFile = null;
+  fileURL = (url, clearFile) => {
+    this.setState({ imageURL: url, resetFile: clearFile });
   };
 
   // updateState = (newstate) => {
@@ -177,6 +180,7 @@ class AssignedIssues extends React.Component {
 
   render() {
     const { assignedIssues, propsReady, user } = this.props;
+    //let imagePath = this.props.fileName;
 
     return !propsReady ? (
       <Spinner />
@@ -318,9 +322,12 @@ class AssignedIssues extends React.Component {
                       <p>Upload Issue Image: </p>
                       <FileUpload
                         fileURL={this.fileURL}
-                        // updateState = {this.updateState}
                       />
-
+                      {/* {console.log("SSSSSSSSSSSSSSSSSSSSSSSSSSS")}
+                      {console.log(this.state.imageURL)} */}
+                        {/* <p>{
+                          {}
+                        }</p> */}
                       <div className="form-group no-margin">
                         <button
                           type="submit"
@@ -376,7 +383,7 @@ export default withTracker(() => {
   // counters example
   const subscriberHandles = [
     Meteor.subscribe('issues'),
-    // Meteor.subscribe('user'),
+    Meteor.subscribe('files.all'),
     Meteor.subscribe('users.sameZip'),
   ];
 
@@ -410,6 +417,14 @@ export default withTracker(() => {
   console.log(sameZipRep);
   // const zip = userReady && user.zip;
 
+  // let imagedoc = null;
+  // let fileName = '';
+
+  // if(this.state.imageURL !== null){
+  //   imagedoc = UserFiles.findOne({ _id:this.state.imageURL});
+  //   fileName = imagedoc.link();
+  // }
+
   return {
     // remote example (if using ddp)
     // usersReady,
@@ -422,5 +437,6 @@ export default withTracker(() => {
     sameZipRep,
     // zip,
     propsReady,
+   // fileName,
   };
 })(AssignedIssues);

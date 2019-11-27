@@ -3,17 +3,26 @@ import Board from 'react-trello';
 import Issues from '../../../api/issues/issues';
 import { withTracker } from 'meteor/react-meteor-data';
 import { USER_TYPE, ISSUE_STATE } from '../../../constants';
-import Spinner from '../../components/Spinner';
-import { issueUpdateState } from '../../../api/issues/methods';
+import Spinner from '../../components/Spinner'; 
+import {issueUpdateState} from '../../../api/issues/methods';
+import '../../../api/issues/methods'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails) {
-    issueUpdateState.call({ issueId: cardId, newState: targetLaneId });
-  }
+    handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails) {
+      issueUpdateState.call({issueId:cardId, newState:targetLaneId});
+
+      // Meteor.call(
+      //   'sendEmail',
+      //   'Abhijeet <abhijeetb9890@gmail.com>',
+      //   'abhute@uci.edu',
+      //   'Hello from Meteor!',
+      //   'This is a test of Email.send.'
+      // );
+    }
 
   render() {
     let data = null;
