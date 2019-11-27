@@ -1,4 +1,12 @@
-import { Grid, List, Paper } from '@material-ui/core';
+import {
+  Grid,
+  List,
+  Paper,
+  ListItem,
+  ListItemText,
+  Typography,
+  Box,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -50,6 +58,17 @@ function Notifications({ propsReady, notifications, lastClicked }) {
 
         <Grid item xs={6}>
           <List className={classes.root}>
+            {notifications.length === 0 && (
+              <Box
+                display="flex"
+                key="0"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography>You have no notifications</Typography>
+              </Box>
+            )}
+
             {notifications.map(notification => (
               <NotificationComponent
                 key={notification._id}

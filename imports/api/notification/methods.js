@@ -339,3 +339,93 @@ export const undoNotifyUpvote = new ValidatedMethod({
     // call code on client and server (optimistic UI)
   },
 });
+
+export const notifyStateChange = new ValidatedMethod({
+  name: 'notification.stateChange',
+  mixins,
+  beforeHooks: [beforeHookExample],
+  afterHooks: [afterHookExample],
+  checkLoggedInError,
+  checkRoles: {
+    roles: ['admin', 'user'],
+    rolesError: {
+      error: 'not-allowed',
+      message: 'You are not allowed to call this method',
+    },
+  },
+  validate: new SimpleSchema({
+    whoChangedId: {
+      type: String,
+      optional: false,
+    },
+    onWhoseIssueId: {
+      type: String,
+      optional: false,
+    },
+    onWhichIssueId: {
+      type: String,
+      optional: false,
+    },
+    oldState: {
+      type: String,
+      optional: false,
+    },
+    newState: {
+      type: String,
+      optional: false,
+    },
+  }).validator(),
+  run({ whoChangedId, onWhoseIssueId, onWhichIssueId, oldState, newState }) {
+    if (Meteor.isServer) {
+      const whoChanged = Meteor.users.findOne(whoChangedId);
+      const onWhoseIssue = Meteor.users.findOne(onWhoseIssueId);
+      const onWhichIssue = Issues.findOne(onWhichIssueId);
+
+      if (!whoChanged)
+        throw new Meteor.Error('Invalid commenter', whoChangedId);
+
+      if (!onWhoseIssue)
+        throw new Meteor.Error('Invalid owner', onWhoseIssueId);
+
+      if (!onWhichIssue)
+        throw new Meteor.Error('Invalid issue', onWhichIssueId);
+
+      if (!this.userId) {
+        // secure code - not available on the client
+        throw new Meteor.Error('not-authorized');
+      }
+      if (onWhoseIssue._id !== onWhichIssue.owner) {
+        throw new Meteor.Error('invalid data');
+      }
+
+      const notificationId = Notification.insert({
+        category: NOTIFICATION_CATEGORIES.ISSUE_STATE_CHANGE.id,
+        message: `${whoChanged.name} changed state of issue ${
+          onWhichIssue.title
+        }`,
+        actorId: whoChangedId,
+        subjectId: onWhoseIssueId,
+        targetId: onWhichIssueId,
+        issueStateChange: {
+          oldState,
+          newState,
+        },
+      });
+      Meteor.users.update(
+        { _id: onWhoseIssueId },
+        {
+          $push: {
+            notifications: {
+              $each: [notificationId],
+              $position: 0,
+            },
+          },
+          $inc: {
+            newNotificationsCount: 1,
+          },
+        }
+      );
+      return notificationId;
+    }
+  },
+});

@@ -7,6 +7,16 @@ import Issues from '../issues/issues';
 // define collection
 const Notification = new Meteor.Collection('notification');
 
+const IssueStateChangeDetails = new SimpleSchema({
+  oldState: {
+    type: String,
+    optional: false,
+  },
+  newState: {
+    type: String,
+    optional: false,
+  },
+});
 // define schema
 const schema = new SimpleSchema({
   _id: {
@@ -64,6 +74,11 @@ const schema = new SimpleSchema({
     type: Object,
     optional: true,
     blackbox: true,
+  },
+
+  issueStateChange: {
+    type: IssueStateChangeDetails,
+    optional: true,
   },
 });
 

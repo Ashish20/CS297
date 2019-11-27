@@ -15,6 +15,7 @@ import {
   notifyCommentAddition,
   notifyUpvote,
   undoNotifyUpvote,
+  notifyStateChange,
 } from '../notification/methods';
 import Issues from './issues';
 import {Email} from 'meteor/email';
@@ -179,7 +180,20 @@ export const issueUpdateState = new ValidatedMethod({
       if (Meteor.user().userType !== USER_TYPE.REPRESENTATIVE.id) {
         throw new Meteor.Error('Only representatives allowed to update state');
       }
-      return Issues.update({ _id: issueId }, { $set: { state: newState } });
+      const issue = Issues.findOne({ _id: issueId });
+      const oldState = issue.state;
+      const updateStatus = Issues.update(
+        { _id: issueId },
+        { $set: { state: newState } }
+      );
+      notifyStateChange.call({
+        whoChangedId: this.userId,
+        onWhoseIssueId: issue.owner,
+        onWhichIssueId: issueId,
+        oldState,
+        newState,
+      });
+      return updateStatus;
     }
   },
 });

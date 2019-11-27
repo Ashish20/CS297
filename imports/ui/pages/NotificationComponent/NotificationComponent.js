@@ -51,10 +51,12 @@ function NotificationComponent({ notification }) {
         message = 'commented on';
         break;
       case NOTIFICATION_CATEGORIES.UPVOTE.id:
-        message = 'upvoted';
+        message = 'upvoted your issue';
         break;
       case NOTIFICATION_CATEGORIES.ISSUE_STATE_CHANGE.id:
-        message = 'changed state of issue ';
+        message = `changed state from '${
+          notification.issueStateChange.oldState
+        }' to '${notification.issueStateChange.newState}' for issue `;
         break;
       default:
         message = 'invalid notification';
