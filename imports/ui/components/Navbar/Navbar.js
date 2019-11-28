@@ -54,6 +54,13 @@ const LoggedInNav = props => (
         </button>
       </NavLink>
     </li>
+    <li className="nav-item">
+      <NavLink to="/explore">
+        <button type="button" className="dropdown-item">
+          Explore Issues
+        </button>
+      </NavLink>
+    </li>
     {Meteor.user().userType === USER_TYPE.REPRESENTATIVE.id && (
       <li className="nav-item">
         <NavLink to="/Kanban">

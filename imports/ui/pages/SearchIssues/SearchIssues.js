@@ -89,11 +89,13 @@ function Hit(props) {
   return (
     <Card className={classes.card}>
       <CardContent>
-        <CardMedia
-          className={classes.media}
-          image={imagePath}
-          title="Profile picture"
-        />
+        {imageId && (
+          <CardMedia
+            className={classes.media}
+            image={imagePath}
+            title="Profile picture"
+          />
+        )}
         <div className="hit-name">
           <Highlight attribute="title" hit={props.hit} />
         </div>
