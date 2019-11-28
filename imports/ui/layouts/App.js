@@ -23,6 +23,7 @@ import ResetPassword from '../pages/ResetPassword';
 import Signup from '../pages/Signup';
 import './App.scss';
 import Notifications from '../pages/NotificationComponent/Notifications';
+import ExploreIssues from '../pages/ExploreIssues/ExploreIssues';
 
 const App = props => (
   <Router>
@@ -47,6 +48,7 @@ const App = props => (
             {...props}
           />
           <PropsRoute path="/newsfeed" component={NewsFeed} {...props} />
+          <PropsRoute path="/explore" component={ExploreIssues} {...props} />
           <PropsRoute
             path="/recover-password"
             component={RecoverPassword}

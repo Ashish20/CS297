@@ -20,6 +20,7 @@ import {
 } from '../notification/methods';
 import Issues from './issues';
 import { Email } from 'meteor/email';
+import algoliasearch from 'algoliasearch';
 /** **************** Helpers **************** */
 
 const mixins = [LoggedInMixin, MethodHooks, CallPromiseMixin];
@@ -49,6 +50,12 @@ const afterHookExample = (methodArgs, returnValue, methodOptions) => {
   // perform tasks
   return returnValue;
 };
+
+const applicationId = 'MONNJNMDPQ';
+const apiKey = '2f5014a87ede4bf7488002662c92f22f';
+const client = algoliasearch(applicationId, apiKey);
+
+const index = client.initIndex('issues');
 
 export const issueCreate = new ValidatedMethod({
   name: 'issues.insert',
@@ -123,6 +130,20 @@ export const issueCreate = new ValidatedMethod({
         toWhomId: representative._id,
         whichIssueId: issueId,
       });
+
+      Meteor.users.update(
+        { _id: assignedTo },
+        { $push: { assignedIssues: issueId } }
+      );
+
+      console.log(issueId);
+
+      const issue = {
+        objectID: issueId,
+        title: title,
+        isssueDesc: description,
+      };
+      index.addObject(issue);
       return issueId;
     }
 

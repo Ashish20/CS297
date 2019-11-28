@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Chart from 'react-google-charts';
+import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Issues from '../../../../api/issues/issues';
 import { withTracker } from 'meteor/react-meteor-data';
@@ -31,7 +32,7 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     height: 0,
-    paddingTop: '100%',
+    paddingTop: '80%',
   },
 
   root: {
@@ -141,52 +142,57 @@ function MediaCard({
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            <Card className={classes.card}>
-              <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image={imgpath}
-                  title="Profile picture"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {userName}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {address}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {emailId}
-                  </Typography>
-                  {isRepresentative && (
-                    <>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        User Type - {userType}
+            <Grid container spacing={6}>
+              <Grid item xs={3} />
+              <Grid item xs={6}>
+                <Card className={classes.card}>
+                  <CardActionArea>
+                    <CardMedia
+                      className={classes.media}
+                      image={imgpath}
+                      title="Profile picture"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {userName}
                       </Typography>
                       <Typography
                         variant="body2"
                         color="textSecondary"
                         component="p"
                       >
-                        {designation}
+                        {address}
                       </Typography>
-                    </>
-                  )}
-                </CardContent>
-              </CardActionArea>
-            </Card>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        {emailId}
+                      </Typography>
+                      {isRepresentative && (
+                        <>
+                          <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                          >
+                            User Type - {userType}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                          >
+                            {designation}
+                          </Typography>
+                        </>
+                      )}
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            </Grid>
           </TabPanel>
           {isRepresentative && (
             <TabPanel value={value} index={1} dir={theme.direction}>
