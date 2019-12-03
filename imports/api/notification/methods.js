@@ -71,6 +71,11 @@ export const notifyCommentAddition = new ValidatedMethod({
       type: String,
       optional: false,
     },
+    comment: {
+      type: Object,
+      optional: false,
+      blackbox: true,
+    },
   }).validator(),
   run({ whoCommentedId, onWhoseIssueId, onWhichIssueId, comment }) {
     if (Meteor.isServer) {
