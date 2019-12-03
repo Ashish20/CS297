@@ -73,7 +73,7 @@ function Issue({
   issue,
   onDragStop,
   // onChange,
-  cloudinaryURL
+  cloudinaryURL,
 }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -104,9 +104,13 @@ function Issue({
       <CardHeader
         className={classes.action}
         avatar={
-          <Avatar src={cloudinaryURL} className={classes.avatar}/>
-            // {issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
-            // <img className="avatar" src={issue.cloudinaryURL} />
+          <Avatar
+            src={cloudinaryURL}
+            alt={issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
+            className={classes.avatar}
+          />
+          // {issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
+          // <img className="avatar" src={issue.cloudinaryURL} />
           // </Avatar>
         }
         action={
@@ -246,7 +250,8 @@ export default withTracker(props => {
     console.log(proPicDoc);
     console.log(proPicPath);
 
-    cloudinaryURL = Meteor.users.findOne(issue.owner).cloudinaryURL;
+    const issueOwner = Meteor.users.findOne(issue.owner);
+    cloudinaryURL = issueOwner && issueOwner.cloudinaryURL;
   }
 
   return {
@@ -256,6 +261,6 @@ export default withTracker(props => {
     issue,
     onDragStop,
     // onChange,
-    cloudinaryURL
+    cloudinaryURL,
   };
 })(Issue);
