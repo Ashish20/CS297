@@ -18,6 +18,7 @@ var trusted = [
   '*.mxpnl.com',
   '*.zendesk.com',
   '*.gstatic.com',
+  'widget.cloudinary.com',
 ];
 
 _.each(trusted, function(origin) {
@@ -28,7 +29,7 @@ _.each(trusted, function(origin) {
 /**
  * allowed images
  */
-const allowImageOrigin = ['via.placeholder.com'];
+const allowImageOrigin = ['via.placeholder.com', 'res.cloudinary.com'];
 allowImageOrigin.forEach(o => BrowserPolicy.content.allowImageOrigin(o));
 
 /**

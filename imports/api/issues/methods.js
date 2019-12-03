@@ -87,7 +87,7 @@ export const issueCreate = new ValidatedMethod({
   //     optional: false,
   //   },
   // }).validator()
-  run({ category, title, description, location, assignedTo, imageURL }) {
+  run({ category, title, description, location, assignedTo, imageURL, cloudinaryURL }) {
     if (Meteor.isServer) {
       // secure code - not available on the client
       if (!this.userId) {
@@ -108,6 +108,7 @@ export const issueCreate = new ValidatedMethod({
         upVoters,
         imageURL,
         assigneeName,
+        cloudinaryURL,
       });
       Meteor.users.update(
         { _id: ownerId },

@@ -99,6 +99,10 @@ const schema = new SimpleSchema({
     type: String,
     optional: false,
   },
+  cloudinaryURL: {
+    type: String,
+    optional: false,
+  }
 });
 
 // attach schema
