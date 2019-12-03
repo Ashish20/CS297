@@ -111,7 +111,7 @@ function MediaCard({
     const imgURL = UserFiles.findOne({ _id: imageURL });
     // const imgpath = imgURL && imgURL.link();
     const imgpath = Meteor.user().cloudinaryURL;
-    console.log("CLOUDINARY URL ", imgpath);
+    console.log('CLOUDINARY URL ', imgpath);
     const data = [
       ['Issue Status', 'Count'],
       ['In Progress', inProgressCount],
@@ -212,14 +212,17 @@ function MediaCard({
         </SwipeableViews>
         {!isRepresentative && (
           <TabPanel value={value} index={1} dir={theme.direction}>
-            {myIssues.map(issue => (
-              // eslint-disable-next-line no-unused-expressions
-              <Issue
-                issueId={issue._id}
-                issue={issue}
-                // onDragStop={this.onDragStop}
-              />
-            ))}
+            <Grid container spacing={6}>
+              <Grid item xs={3} />
+              {myIssues.map(issue => (
+                // eslint-disable-next-line no-unused-expressions
+                <Issue
+                  issueId={issue._id}
+                  issue={issue}
+                  // onDragStop={this.onDragStop}
+                />
+              ))}
+            </Grid>
           </TabPanel>
         )}
       </div>

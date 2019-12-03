@@ -10,7 +10,12 @@ import UserFiles from '../../../api/UserFiles/userFiles';
 import './AssignedIssues.scss';
 // import { issueInsert } from '../../../api/issues/issues.js';
 
-import {Image, Video, Transformation, CloudinaryContext} from 'cloudinary-react';
+import {
+  Image,
+  Video,
+  Transformation,
+  CloudinaryContext,
+} from 'cloudinary-react';
 // import cloudinary from 'cloudinary-core';
 // const cloudinaryCore = new cloudinary.Cloudinary({cloud_name: 'politracker'});
 import Dropzone from 'react-dropzone';
@@ -46,8 +51,8 @@ class AssignedIssues extends React.Component {
       progress: 0,
       inProgress: false,
       resetFile: null,
-      images:[],
-      cloudinaryURL:null,
+      images: [],
+      cloudinaryURL: null,
     };
     this.state = this.initialState;
   }
@@ -58,10 +63,9 @@ class AssignedIssues extends React.Component {
       return history.push('/login');
     }
 
+    const script = document.createElement('script');
 
-    const script = document.createElement("script");
-
-    script.src = "https://widget.cloudinary.com/v2.0/global/all.js";
+    script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
     script.async = true;
 
     document.body.appendChild(script);
@@ -142,48 +146,52 @@ class AssignedIssues extends React.Component {
     return listOfIssues;
   };
 
-  dropzone = (files) => {
-
+  dropzone = files => {
     const image = files[0];
     // const cloudName = 'politracker';
     const url = 'https://api.cloudinary.com/v1_1/politracker/image/upload';
     const preset = 'cusubgfk';
-    const timestamp = Date.now()/1000;
-    const paramStr = 'timestamp='+timestamp+'&upload_preset='+preset+'6QsYiCM4AXXujX0FjChsqGhXG7g'; 
+    const timestamp = Date.now() / 1000;
+    const paramStr =
+      'timestamp=' +
+      timestamp +
+      '&upload_preset=' +
+      preset +
+      '6QsYiCM4AXXujX0FjChsqGhXG7g';
 
     const signature = sha1(paramStr);
 
     const params = {
-      'api_key': '636368571654257',
-      'timestamp':timestamp,
-      'upload_preset':preset,
-      'signature' : signature
-    }
+      api_key: '636368571654257',
+      timestamp: timestamp,
+      upload_preset: preset,
+      signature: signature,
+    };
 
-    let uploadRequest = superagent.post(url)
-    uploadRequest.attach('file', image)
+    let uploadRequest = superagent.post(url);
+    uploadRequest.attach('file', image);
     console.log(image);
-    Object.keys(params).forEach((key) => {
-      uploadRequest.field(key, params[key])
-    })
+    Object.keys(params).forEach(key => {
+      uploadRequest.field(key, params[key]);
+    });
     console.log(uploadRequest);
 
-    uploadRequest.end((err, resp)=>{
-      if(err) {
+    uploadRequest.end((err, resp) => {
+      if (err) {
         // callbackify(err, null)
-        return
+        return;
       }
-      console.log('UPLOAD COMPLETE'+ JSON.stringify(resp.body));
+      console.log('UPLOAD COMPLETE' + JSON.stringify(resp.body));
 
-      const uploaded = resp.body
-      let updatedImages = Object.assign([], this.state.images)
-      updatedImages.push(uploaded)
+      const uploaded = resp.body;
+      let updatedImages = Object.assign([], this.state.images);
+      updatedImages.push(uploaded);
 
       this.setState({
-        images: updatedImages
-      })
-    })
-  }
+        images: updatedImages,
+      });
+    });
+  };
 
   handleRemove = (event, issueId) => {
     event.preventDefault();
@@ -240,46 +248,45 @@ class AssignedIssues extends React.Component {
 
   // updateState = (newstate) => {
   // }
-  
-  
 
   // handleCloudUpload = () => {
   //   this.myWidget.open();
   // }
 
   render() {
-  const { assignedIssues, propsReady, user } = this.props;
-  console.log('CLOUDINARY ', cloudinary);
+    const { assignedIssues, propsReady, user } = this.props;
+    console.log('CLOUDINARY ', cloudinary);
 
-  const myWidget = cloudinary.createUploadWidget({
-    cloudName: 'politracker', 
-    uploadPreset: 'cusubgfk',
-   }, (error, result) => { 
-      if (!error && result && result.event === "success") { 
-        console.log('Done! Here is the image info: ', result.info);
-        // console.log({result.secure_url});
-        this.setState({cloudinaryURL:result.info.secure_url});
-        console.log(this.state.cloudinaryURL);
-
+    const myWidget = cloudinary.createUploadWidget(
+      {
+        cloudName: 'politracker',
+        uploadPreset: 'cusubgfk',
+      },
+      (error, result) => {
+        if (!error && result && result.event === 'success') {
+          console.log('Done! Here is the image info: ', result.info);
+          // console.log({result.secure_url});
+          this.setState({ cloudinaryURL: result.info.secure_url });
+          console.log(this.state.cloudinaryURL);
+        }
       }
-    }
-  );
-
-
+    );
 
     //let imagePath = this.props.fileName;
 
-    // var widget = cloudinary.createUploadWidget({ 
+    // var widget = cloudinary.createUploadWidget({
     //   cloudName: "demo", uploadPreset: "preset1" }, (error, result) => { });
 
     // const list =this.state.images.map((image, i) => {
     //   return (
     //     <li key = {i}>
-        // <img src = {image.secure_url}/>
-        {/* </li>
+    // <img src = {image.secure_url}/>
+    {
+      /* </li>
       
       )
-    }) */}
+    }) */
+    }
 
     return !propsReady ? (
       <Spinner />
@@ -423,17 +430,30 @@ class AssignedIssues extends React.Component {
                         fileURL={this.fileURL}
                       /> */}
 
-
                       {/* {widget.open()}; */}
 
                       {/* <Dropzone onDrop = {this.dropzone.bind(this)}/> */}
                       {/* <input type="file" onChange={e => this.dropzone(e)}/> */}
 
+                      <button
+                        id="upload_widget"
+                        type="button"
+                        className="cloudinary-button"
+                        onClick={() => myWidget.open()}
+                      >
+                        Upload files
+                      </button>
 
-                      <button id="upload_widget" type ="button" className="cloudinary-button" onClick={() => myWidget.open()}>Upload files</button>
+                      {/* <Grid> */}
+                      <img
+                        style={{
+                          height: '60px',
+                          width: '60px',
+                          border: '0',
+                        }}
+                        src={this.state.cloudinaryURL}
+                      />
 
-                      <img src = {this.state.cloudinaryURL}/>
-                      
                       {/* <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript">  </script>
                       
                       <script type="text/javascript">  
@@ -446,7 +466,6 @@ class AssignedIssues extends React.Component {
                             myWidget.open();
                       </script> */}
 
-                      
                       {/* <img src={cloudinaryCore.url('sample')} /> */}
                       {/* {console.log("CCCLLLOOOUUUDDD")}
                       <img src='https://res.cloudinary.com/politracker/image/upload/v1574851729/sjb9pstsyp2s64xxismw.jpg' />
@@ -455,7 +474,7 @@ class AssignedIssues extends React.Component {
 
                       {/* {console.log("SSSSSSSSSSSSSSSSSSSSSSSSSSS")}
                       {console.log(this.state.imageURL)} */}
-                        {/* <p>{
+                      {/* <p>{
                           {}
                         }</p> */}
                       <div className="form-group no-margin">
@@ -567,6 +586,6 @@ export default withTracker(() => {
     sameZipRep,
     // zip,
     propsReady,
-   // fileName,
+    // fileName,
   };
 })(AssignedIssues);

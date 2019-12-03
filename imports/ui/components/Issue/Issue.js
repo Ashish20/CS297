@@ -113,7 +113,9 @@ function Issue({
             src={cloudinaryURL}
             alt={issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
             className={classes.avatar}
-          />
+          >
+            {issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
+          </Avatar>
           // {issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
           // <img className="avatar" src={issue.cloudinaryURL} />
           // </Avatar>
