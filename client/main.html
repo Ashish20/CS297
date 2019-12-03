@@ -10,12 +10,14 @@
     http-equiv="Content-Security-Policy"
     content="default-src *; 
     style-src 'self' 'unsafe-inline' * ; 
-    script-src * ; 
+    script-src * https://widget.cloudinary.com/v2.0/global/all.js; 
     script-src-elem 'self' 'unsafe-inline' * ; 
-    img-src https: data: http:;
+    img-src https: data: http: widget.cloudinary.com;
     font-src https: data: http: mediastream: blob: filesystem: self ;
     "
   />
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>  
+
 </head>
 
 <body>

@@ -27,6 +27,7 @@ Accounts.onCreateUser((options, user) => {
     imageURL: options.profile.imageURL,
     notifications: [],
     newNotificationsCount: 0,
+    cloudinaryURL: options.profile.cloudinaryURL,
   };
 
   return userDetails;

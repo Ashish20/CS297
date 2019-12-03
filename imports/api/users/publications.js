@@ -33,6 +33,7 @@ if (Meteor.isServer) {
             imageURL: 1,
             notifications: 1,
             newNotificationsCount: 1,
+            cloudinaryURL : 1,
           },
         }
       );
@@ -55,6 +56,8 @@ if (Meteor.isServer) {
             designation: 1,
             zip: 1,
             userType: 1,
+                        cloudinaryURL : 1,
+
           },
         }
       );
@@ -75,6 +78,8 @@ if (Meteor.isServer) {
             designation: 1,
             zip: 1,
             userType: 1,
+                        cloudinaryURL : 1,
+
           },
         }
       );
@@ -100,6 +105,8 @@ Meteor.publish('userProfile', function(userId) {
           assignedIssues: 1,
           ownedIssues: 1,
           imageURL: 1,
+                      cloudinaryURL : 1,
+
         },
       }
     );

@@ -100,7 +100,7 @@ export const issueCreate = new ValidatedMethod({
   //     optional: false,
   //   },
   // }).validator()
-  run({ category, title, description, location, assignedTo, imageURL }) {
+  run({ category, title, description, location, assignedTo, imageURL, cloudinaryURL }) {
     if (Meteor.isServer) {
       if (!this.userId) {
         throw new Meteor.Error('not-authorized');
@@ -120,6 +120,7 @@ export const issueCreate = new ValidatedMethod({
         upVoters,
         imageURL,
         assigneeName,
+        cloudinaryURL,
       });
       Meteor.users.update(
         { _id: ownerId },

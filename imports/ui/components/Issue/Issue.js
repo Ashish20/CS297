@@ -73,6 +73,7 @@ function Issue({
   issue,
   onDragStop,
   // onChange,
+  cloudinaryURL,
 }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -108,10 +109,14 @@ function Issue({
       <CardHeader
         className={classes.action}
         avatar={
-          <Avatar className={classes.avatar}>
-            {issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
-            {/* <img className="avatar" src={proPicPath} /> */}
-          </Avatar>
+          <Avatar
+            src={cloudinaryURL}
+            alt={issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
+            className={classes.avatar}
+          />
+          // {issue.ownerName ? issue.ownerName.substring(0, 1) : ''}
+          // <img className="avatar" src={issue.cloudinaryURL} />
+          // </Avatar>
         }
         action={
           // <IconButton aria-label="settings">
@@ -155,8 +160,8 @@ function Issue({
       <CardContent>
         <Typography variant="body1">{issue.description}</Typography>
       </CardContent>
-      {issue.imageURL && (
-        <CardMedia className={classes.media} image={imagePath} />
+      {issue.cloudinaryURL && (
+        <CardMedia className={classes.media} image={issue.cloudinaryURL} />
       )}
       <CardActions disableSpacing>
         {/* <DiscreteSlider
@@ -213,11 +218,13 @@ function Issue({
 export default withTracker(props => {
   const subscriberHandles = [
     Meteor.subscribe('user'),
+    Meteor.subscribe('users.sameZip'),
     Meteor.subscribe('files.all'),
   ];
   const propsReady = subscriberHandles.every(handle => handle.ready());
   console.log('In Withtrackerrrrrrrrrrrrrrr');
 
+  let cloudinaryURL = '';
   let image_Id = '';
   let issuedoc = '';
   let imagePath = '';
@@ -231,9 +238,9 @@ export default withTracker(props => {
 
   if (propsReady) {
     // Issue Image
-    image_Id = props.issue.imageURL;
-    issuedoc = UserFiles.findOne({ _id: image_Id });
-    imagePath = issuedoc && issuedoc.link();
+    image_Id = props.issue.cloudinaryURL;
+    // issuedoc = UserFiles.findOne({ _id: image_Id });
+    // imagePath = issuedoc && issuedoc.link();
 
     console.log(image_Id);
     console.log(issuedoc);
@@ -247,14 +254,18 @@ export default withTracker(props => {
     console.log(proPic_Id);
     console.log(proPicDoc);
     console.log(proPicPath);
+
+    const issueOwner = Meteor.users.findOne(issue.owner);
+    cloudinaryURL = issueOwner && issueOwner.cloudinaryURL;
   }
 
   return {
-    imagePath,
+    image_Id,
     proPicPath,
     issueId,
     issue,
     onDragStop,
     // onChange,
+    cloudinaryURL,
   };
 })(Issue);

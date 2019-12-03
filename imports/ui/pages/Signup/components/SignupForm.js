@@ -20,6 +20,8 @@ import Alert from '../../../components/Alert';
 import { ISSUE_CATEGORIES, USER_TYPE } from '../../../../constants';
 import FileUpload from '../../../components/FileUpload/FileUpload';
 const debug = require('debug')('demo:file');
+import superagent from 'superagent';
+import sha1 from 'sha1';
 
 function Copyright() {
   return (
@@ -146,6 +148,31 @@ export default function SignUp({ state, updateState, handleSubmit }) {
   fileURL = url => {
     updateState({ imageURL: url });
   };
+
+  // const { loggedIn, history, propsReady, user } = this.props;
+  // if (!loggedIn) {
+  //   return history.push('/login');
+  // }
+  const script = document.createElement('script');
+  script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
+  script.async = true;
+  document.body.appendChild(script);
+
+  const myWidget = cloudinary.createUploadWidget(
+    {
+      cloudName: 'politracker',
+      uploadPreset: 'cusubgfk',
+    },
+    (error, result) => {
+      if (!error && result && result.event === 'success') {
+        console.log('Done! Here is the image info: ', result.info);
+        // console.log({result.secure_url});
+        updateState({ cloudinaryURL: result.info.secure_url });
+        // console.log(this.state.cloudinaryURL);
+      }
+    }
+  );
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -257,10 +284,20 @@ export default function SignUp({ state, updateState, handleSubmit }) {
           </Grid>
 
           <p>Upload Profile Photo:</p>
-          <FileUpload
+          {/* <FileUpload
             fileURL={fileURL}
             // updateState={updateState}
-          />
+          /> */}
+          <button
+            id="upload_widget"
+            type="button"
+            className="cloudinary-button"
+            onClick={() => myWidget.open()}
+          >
+            Upload files
+          </button>
+
+          {/* <img src = {this.state.cloudinaryURL}/> */}
 
           {state.errMsg && <Alert errMsg={state.errMsg} />}
           <Button
