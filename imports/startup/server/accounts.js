@@ -25,6 +25,7 @@ Accounts.onCreateUser((options, user) => {
     assignedIssues: [],
     ownedIssues: [],
     imageURL: options.profile.imageURL,
+    cloudinaryURL: options.profile.cloudinaryURL,
   };
 
   return userDetails;

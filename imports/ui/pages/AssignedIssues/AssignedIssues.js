@@ -25,7 +25,7 @@ import {
 import Issues from '../../../api/issues/issues';
 import { ISSUE_CATEGORIES } from '../../../constants';
 import FileUpload from '../../components/FileUpload/FileUpload';
-import { callbackify } from 'util';
+// import { callbackify } from 'util';
 const debug = require('debug')('demo:file');
 // import Users from '../../../api/users/users';
 
@@ -225,7 +225,7 @@ class AssignedIssues extends React.Component {
       imageURL,
       cloudinaryURL,
     });
-    this.state.resetFile.call();
+    // this.state.resetFile.call();
     this.reset();
   };
 
@@ -248,13 +248,13 @@ class AssignedIssues extends React.Component {
   // }
 
   render() {
-    const { assignedIssues, propsReady, user } = this.props;
-
-    console.log('CLOUDINARY ', cloudinary);
+  const { assignedIssues, propsReady, user } = this.props;
+  console.log('CLOUDINARY ', cloudinary);
 
   const myWidget = cloudinary.createUploadWidget({
     cloudName: 'politracker', 
-    uploadPreset: 'cusubgfk'}, (error, result) => { 
+    uploadPreset: 'cusubgfk',
+   }, (error, result) => { 
       if (!error && result && result.event === "success") { 
         console.log('Done! Here is the image info: ', result.info);
         // console.log({result.secure_url});
@@ -264,6 +264,8 @@ class AssignedIssues extends React.Component {
       }
     }
   );
+
+
 
     //let imagePath = this.props.fileName;
 
@@ -417,18 +419,18 @@ class AssignedIssues extends React.Component {
                         />
                       </div>
                       <p>Upload Issue Image: </p>
-                      <FileUpload
+                      {/* <FileUpload
                         fileURL={this.fileURL}
-                      />
+                      /> */}
 
 
                       {/* {widget.open()}; */}
 
                       {/* <Dropzone onDrop = {this.dropzone.bind(this)}/> */}
-                      <input type="file" onChange={e => this.dropzone(e)}/>
+                      {/* <input type="file" onChange={e => this.dropzone(e)}/> */}
 
 
-                      <button id="upload_widget" className="cloudinary-button" onClick={() => myWidget.open()}>Upload files</button>
+                      <button id="upload_widget" type ="button" className="cloudinary-button" onClick={() => myWidget.open()}>Upload files</button>
 
                       <img src = {this.state.cloudinaryURL}/>
                       
