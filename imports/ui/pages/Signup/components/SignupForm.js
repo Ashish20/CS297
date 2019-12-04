@@ -59,6 +59,11 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
+  uploadPhoto: {
+    margin: theme.spacing(1),
+    width: '150px',
+    height: '150px',
+  },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
@@ -165,7 +170,20 @@ export default function SignUp({ state, updateState, handleSubmit, myWidget }) {
           Sign up
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} alignItems="center" justify="center">
+            <Grid item xs={6}>
+              {/* <button type="button" onClick={() => myWidget.open()}> */}
+              <Link href="#">
+                <Avatar
+                  onClick={() => myWidget.open()}
+                  className={classes.uploadPhoto}
+                  src={state.cloudinaryURL}
+                >
+                  <Typography>Upload Photo</Typography>
+                </Avatar>
+              </Link>
+            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 // autoComplete="fname"
@@ -264,19 +282,10 @@ export default function SignUp({ state, updateState, handleSubmit, myWidget }) {
             </Grid>
           </Grid>
 
-          <p>Upload Profile Photo:</p>
           {/* <FileUpload
             fileURL={fileURL}
             // updateState={updateState}
           /> */}
-          <button
-            id="upload_widget"
-            type="button"
-            className="cloudinary-button"
-            onClick={() => myWidget.open()}
-          >
-            Upload files
-          </button>
 
           {/* <img src = {this.state.cloudinaryURL}/> */}
 
