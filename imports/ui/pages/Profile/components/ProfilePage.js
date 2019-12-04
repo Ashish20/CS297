@@ -145,8 +145,8 @@ function MediaCard({
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
             <Grid container spacing={6}>
-              <Grid item xs={3} />
-              <Grid item xs={6}>
+              <Grid item xs={12} md={3} />
+              <Grid item xs={12} md={6}>
                 <Card className={classes.card}>
                   <CardActionArea>
                     <CardMedia
@@ -213,7 +213,7 @@ function MediaCard({
         {!isRepresentative && (
           <TabPanel value={value} index={1} dir={theme.direction}>
             <Grid container spacing={6}>
-              <Grid item xs={3} />
+              <Grid item xs={12} md={3} />
               {myIssues.map(issue => (
                 // eslint-disable-next-line no-unused-expressions
                 <Issue
