@@ -196,7 +196,20 @@ const Navbar = props => {
     <nav className="navbar navbar-dark navbar-expand-lg">
       {/* <Status loggedIn={loggedIn} /> */}
       <span className="navbar-brand" href="#">
-        <NavLink to="/">PoliTracker</NavLink>
+        <NavLink to="/">
+          <Grid container style={{ flexWrap: 'nowrap' }} spacing={1}>
+            <Grid item>
+              <Avatar
+                style={{ width: 25, height: 25 }}
+                variant="square"
+                src="/PolitrackerLogo.png"
+              />
+            </Grid>
+            <Grid item>
+              <span>Politracker</span>
+            </Grid>
+          </Grid>
+        </NavLink>
       </span>
       {/* {loggedIn && <NavLink to="/assigned_issues/">Assigned Issues</NavLink>} */}
       {/* {loggedIn && <NavLink to="/newsfeed/">News Feed</NavLink>} */}
