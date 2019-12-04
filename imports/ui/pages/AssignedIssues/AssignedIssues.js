@@ -36,6 +36,20 @@ const debug = require('debug')('demo:file');
 
 class AssignedIssues extends React.Component {
   initialState = {};
+  myWidget = cloudinary.createUploadWidget(
+    {
+      cloudName: 'politracker',
+      uploadPreset: 'cusubgfk',
+    },
+    (error, result) => {
+      if (!error && result && result.event === 'success') {
+        console.log('Done! Here is the image info: ', result.info);
+        // console.log({result.secure_url});
+        this.setState({ cloudinaryURL: result.info.secure_url });
+        console.log(this.state.cloudinaryURL);
+      }
+    }
+  );
   constructor(props) {
     super(props);
     this.initialState = {
@@ -62,13 +76,6 @@ class AssignedIssues extends React.Component {
     if (!loggedIn) {
       return history.push('/login');
     }
-
-    const script = document.createElement('script');
-
-    script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
-    script.async = true;
-
-    document.body.appendChild(script);
     // while (!userReady);
     // this.initialState.location = user.zip;
     // this.setState(this.initialState);
@@ -257,21 +264,6 @@ class AssignedIssues extends React.Component {
     const { assignedIssues, propsReady, user } = this.props;
     console.log('CLOUDINARY ', cloudinary);
 
-    const myWidget = cloudinary.createUploadWidget(
-      {
-        cloudName: 'politracker',
-        uploadPreset: 'cusubgfk',
-      },
-      (error, result) => {
-        if (!error && result && result.event === 'success') {
-          console.log('Done! Here is the image info: ', result.info);
-          // console.log({result.secure_url});
-          this.setState({ cloudinaryURL: result.info.secure_url });
-          console.log(this.state.cloudinaryURL);
-        }
-      }
-    );
-
     //let imagePath = this.props.fileName;
 
     // var widget = cloudinary.createUploadWidget({
@@ -439,7 +431,7 @@ class AssignedIssues extends React.Component {
                         id="upload_widget"
                         type="button"
                         className="cloudinary-button"
-                        onClick={() => myWidget.open()}
+                        onClick={() => this.myWidget.open()}
                       >
                         Upload files
                       </button>

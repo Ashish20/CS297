@@ -136,7 +136,7 @@ function renderRepresentativeComponent({ state, updateState }) {
   );
 }
 
-export default function SignUp({ state, updateState, handleSubmit }) {
+export default function SignUp({ state, updateState, handleSubmit, myWidget }) {
   const classes = useStyles();
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
@@ -153,25 +153,6 @@ export default function SignUp({ state, updateState, handleSubmit }) {
   // if (!loggedIn) {
   //   return history.push('/login');
   // }
-  const script = document.createElement('script');
-  script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
-  script.async = true;
-  document.body.appendChild(script);
-
-  const myWidget = cloudinary.createUploadWidget(
-    {
-      cloudName: 'politracker',
-      uploadPreset: 'cusubgfk',
-    },
-    (error, result) => {
-      if (!error && result && result.event === 'success') {
-        console.log('Done! Here is the image info: ', result.info);
-        // console.log({result.secure_url});
-        updateState({ cloudinaryURL: result.info.secure_url });
-        // console.log(this.state.cloudinaryURL);
-      }
-    }
-  );
 
   return (
     <Container component="main" maxWidth="xs">

@@ -25,52 +25,61 @@ import './App.scss';
 import Notifications from '../pages/NotificationComponent/Notifications';
 import ExploreIssues from '../pages/ExploreIssues/ExploreIssues';
 
-const App = props => (
-  <Router>
-    <div>
-      <PropsRoute component={Navbar} {...props} />
-      {props.loggingIn && <Spinner />}
-      <div className="appBody">
-        <Switch>
-          <PropsRoute exact path="/" component={Login} {...props} />
-          <PropsRoute path="/login" component={Login} {...props} />
-          <PropsRoute path="/signup" component={Signup} {...props} />
-          <PropsRoute exact path="/profile" component={Profile} {...props} />
-          <PropsRoute
-            exact
-            path="/profile/:_id"
-            component={Profile}
-            {...props}
-          />
-          <PropsRoute
-            path="/assigned_issues/"
-            component={AssignedIssues}
-            {...props}
-          />
-          <PropsRoute path="/newsfeed" component={NewsFeed} {...props} />
-          <PropsRoute path="/explore" component={ExploreIssues} {...props} />
-          <PropsRoute
-            path="/recover-password"
-            component={RecoverPassword}
-            {...props}
-          />
-          <PropsRoute
-            path="/reset-password/:token"
-            component={ResetPassword}
-            {...props}
-          />
-          <PropsRoute path="/Kanban" component={Kanban} {...props} />
-          <Route
-            path="/notifications/:lastClicked"
-            component={Notifications}
-            {...{ props }}
-          />
-          <PropsRoute component={NotFound} {...props} />
-        </Switch>
+const App = props => {
+  const script = document.createElement('script');
+
+  script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
+  script.async = true;
+
+  document.body.appendChild(script);
+
+  return (
+    <Router>
+      <div>
+        <PropsRoute component={Navbar} {...props} />
+        {props.loggingIn && <Spinner />}
+        <div className="appBody">
+          <Switch>
+            <PropsRoute exact path="/" component={Login} {...props} />
+            <PropsRoute path="/login" component={Login} {...props} />
+            <PropsRoute path="/signup" component={Signup} {...props} />
+            <PropsRoute exact path="/profile" component={Profile} {...props} />
+            <PropsRoute
+              exact
+              path="/profile/:_id"
+              component={Profile}
+              {...props}
+            />
+            <PropsRoute
+              path="/assigned_issues/"
+              component={AssignedIssues}
+              {...props}
+            />
+            <PropsRoute path="/newsfeed" component={NewsFeed} {...props} />
+            <PropsRoute path="/explore" component={ExploreIssues} {...props} />
+            <PropsRoute
+              path="/recover-password"
+              component={RecoverPassword}
+              {...props}
+            />
+            <PropsRoute
+              path="/reset-password/:token"
+              component={ResetPassword}
+              {...props}
+            />
+            <PropsRoute path="/Kanban" component={Kanban} {...props} />
+            <Route
+              path="/notifications/:lastClicked"
+              component={Notifications}
+              {...{ props }}
+            />
+            <PropsRoute component={NotFound} {...props} />
+          </Switch>
+        </div>
       </div>
-    </div>
-  </Router>
-);
+    </Router>
+  );
+};
 
 App.propTypes = {
   loggingIn: PropTypes.bool.isRequired,
