@@ -1,8 +1,15 @@
+import { Avatar, Grid } from '@material-ui/core';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Notifications } from 'styled-icons/material/Notifications';
+import { News } from 'styled-icons/boxicons-regular/News';
+import { Dashboard } from 'styled-icons/boxicons-solid/Dashboard';
+import { HandPointer } from 'styled-icons/fa-solid/HandPointer';
+import { Explore } from 'styled-icons/material/Explore';
+import { LogoutCircleR } from 'styled-icons/remix-fill/LogoutCircleR';
 import { USER_TYPE } from '../../../constants';
 import Search from '../../pages/Search/Search';
 import './Navbar.scss';
@@ -50,14 +57,28 @@ const LoggedInNav = props => (
     <li className="nav-item">
       <NavLink to="/newsfeed">
         <button type="button" className="dropdown-item">
-          News Feed
+          <Grid container style={{ flexWrap: 'nowrap' }} spacing={1}>
+            <Grid item>
+              <News size="25" />
+            </Grid>
+            <Grid item>
+              <span>News</span>
+            </Grid>
+          </Grid>
         </button>
       </NavLink>
     </li>
     <li className="nav-item">
       <NavLink to="/explore">
         <button type="button" className="dropdown-item">
-          Explore Issues
+          <Grid container style={{ flexWrap: 'nowrap' }} spacing={1}>
+            <Grid item>
+              <Explore size="25" />
+            </Grid>
+            <Grid item>
+              <span>Explore</span>
+            </Grid>
+          </Grid>
         </button>
       </NavLink>
     </li>
@@ -65,7 +86,14 @@ const LoggedInNav = props => (
       <li className="nav-item">
         <NavLink to="/Kanban">
           <button type="button" className="dropdown-item">
-            Kanban Board
+            <Grid container style={{ flexWrap: 'nowrap' }} spacing={1}>
+              <Grid item>
+                <Dashboard size="25" />
+              </Grid>
+              <Grid item>
+                <span>Kanban</span>
+              </Grid>
+            </Grid>
           </button>
         </NavLink>
       </li>
@@ -74,7 +102,14 @@ const LoggedInNav = props => (
       <li className="nav-item">
         <NavLink to="/assigned_issues">
           <button type="button" className="dropdown-item">
-            Raise Issues
+            <Grid container style={{ flexWrap: 'nowrap' }} spacing={1}>
+              <Grid item>
+                <HandPointer size="25" />
+              </Grid>
+              <Grid item>
+                <span>Raise</span>
+              </Grid>
+            </Grid>
           </button>
         </NavLink>
       </li>
@@ -82,15 +117,35 @@ const LoggedInNav = props => (
     <li className="nav-item">
       <NavLink to={`/notifications/${Date.now()}`}>
         <button type="button" className="dropdown-item">
-          Notifications
-          {renderNewNotificationCount(props.newNotificationsCount)}
+          <Grid container style={{ flexWrap: 'nowrap' }} spacing={1}>
+            <Grid item>
+              <Notifications size="25" />
+            </Grid>
+            <Grid item>
+              <span>Notifications</span>
+              {renderNewNotificationCount(props.newNotificationsCount)}
+            </Grid>
+          </Grid>
         </button>
       </NavLink>
     </li>
     <li className="nav-item">
       <NavLink to="/profile">
         <button type="button" className="dropdown-item">
-          Profile
+          {/* Profile */}
+          <Grid container style={{ flexWrap: 'nowrap' }} spacing={1}>
+            <Grid item>
+              <Avatar
+                src={Meteor.user().cloudinaryURL}
+                style={{ width: 25, height: 25 }}
+              >
+                {Meteor.user().name ? Meteor.user().name.substring(0, 1) : ''}
+              </Avatar>
+            </Grid>
+            <Grid item>
+              <span>Profile</span>
+            </Grid>
+          </Grid>
         </button>
       </NavLink>
     </li>
@@ -100,7 +155,14 @@ const LoggedInNav = props => (
     <li className="nav-item">
       <NavLink to="/login" onClick={() => Meteor.logout()}>
         <button type="button" className="dropdown-item">
-          Logout
+          <Grid container style={{ flexWrap: 'nowrap' }} spacing={1}>
+            <Grid item>
+              <LogoutCircleR size="25" />
+            </Grid>
+            <Grid item>
+              <span>Logout</span>
+            </Grid>
+          </Grid>
         </button>
       </NavLink>
     </li>
@@ -131,7 +193,7 @@ const Navbar = props => {
   const { loggedIn } = props;
   const { newNotificationsCount } = props;
   return (
-    <nav className="navbar navbar-expand-lg">
+    <nav className="navbar navbar-dark navbar-expand-lg">
       {/* <Status loggedIn={loggedIn} /> */}
       <span className="navbar-brand" href="#">
         <NavLink to="/">PoliTracker</NavLink>

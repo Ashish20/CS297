@@ -110,7 +110,7 @@ function MediaCard({
     // var obj = require(Mongo).ObjectId;
     const imgURL = UserFiles.findOne({ _id: imageURL });
     // const imgpath = imgURL && imgURL.link();
-    const imgpath = Meteor.user().cloudinaryURL;
+    const imgpath = user.cloudinaryURL;
     console.log('CLOUDINARY URL ', imgpath);
     const data = [
       ['Issue Status', 'Count'],

@@ -54,9 +54,9 @@ function Notifications({ propsReady, notifications, lastClicked }) {
   if (propsReady) {
     return (
       <Grid container spacing={1}>
-        <Grid item xs={3} />
+        <Grid item xs={12} md={3} />
 
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <List className={classes.root}>
             {notifications.length === 0 && (
               <Box
@@ -78,7 +78,7 @@ function Notifications({ propsReady, notifications, lastClicked }) {
           </List>
         </Grid>
 
-        <Grid item xs={3} />
+        <Grid item xs={12} md={3} />
         {/* <Paper> </Paper> */}
         {/* </Grid> */}
       </Grid>

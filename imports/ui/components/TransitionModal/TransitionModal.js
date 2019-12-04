@@ -43,11 +43,11 @@ export default function TransitionsModal({ open, handleClose, render }) {
       >
         <Fade in={open}>
           <Grid container>
-            <Grid item xs={3} onClick={handleClose} />
-            <Grid item xs={6}>
+            <Grid item xs={1} md={3} onClick={handleClose} />
+            <Grid item xs={10} md={6}>
               {render()}
             </Grid>
-            <Grid item xs={3} onClick={handleClose} />
+            <Grid item xs={1} md={3} onClick={handleClose} />
           </Grid>
         </Fade>
       </Modal>
