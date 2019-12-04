@@ -26,13 +26,6 @@ import Notifications from '../pages/NotificationComponent/Notifications';
 import ExploreIssues from '../pages/ExploreIssues/ExploreIssues';
 
 const App = props => {
-  const script = document.createElement('script');
-
-  script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
-  script.async = true;
-
-  document.body.appendChild(script);
-
   return (
     <Router>
       <div>

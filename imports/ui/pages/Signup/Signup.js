@@ -1,15 +1,15 @@
 import { Accounts } from 'meteor/accounts-base';
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
+import sha1 from 'sha1';
+import superagent from 'superagent';
+import { USER_TYPE } from '../../../constants';
 import SignupForm from './components/SignupForm';
 // import UserFiles from '../../../api/UserFiles/userFiles'
 // import styles
 import './Signup.scss';
-import { USER_TYPE } from '../../../constants';
-import FileUpload from '../../components/FileUpload/FileUpload';
+
 const debug = require('debug')('demo:file');
-import superagent from 'superagent';
-import sha1 from 'sha1';
 
 class Signup extends React.Component {
   myWidget = cloudinary.createUploadWidget(
@@ -26,6 +26,7 @@ class Signup extends React.Component {
       }
     }
   );
+
   constructor(props) {
     super(props);
     this.state = {
@@ -41,6 +42,7 @@ class Signup extends React.Component {
       imageURL: '',
       cloudinaryURL: null,
     };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateState = this.updateState.bind(this);
   }
