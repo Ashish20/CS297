@@ -68,7 +68,7 @@ const LoggedInNav = props => (
         </button>
       </NavLink>
     </li>
-    <li className="nav-item">
+    {/* <li className="nav-item">
       <NavLink to="/explore">
         <button type="button" className="dropdown-item">
           <Grid container style={{ flexWrap: 'nowrap' }} spacing={1}>
@@ -81,7 +81,7 @@ const LoggedInNav = props => (
           </Grid>
         </button>
       </NavLink>
-    </li>
+    </li> */}
     {Meteor.user().userType === USER_TYPE.REPRESENTATIVE.id && (
       <li className="nav-item">
         <NavLink to="/Kanban">

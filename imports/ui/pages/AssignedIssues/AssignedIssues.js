@@ -285,7 +285,7 @@ class AssignedIssues extends React.Component {
     ) : (
       <React.Fragment>
         <div className="container">
-          <h1>AssignedIssues Page</h1>
+          <h1>Raise Issues</h1>
           <div className="row">
             <div className="col">
               <section className="create-issue-form">
