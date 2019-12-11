@@ -1,34 +1,16 @@
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Paper, Divider } from '@material-ui/core';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Issues from '../../../api/issues/issues';
-import { issueUpdate } from '../../../api/issues/methods';
 import Issue from '../../components/Issue/Issue';
-
+import { PostIssue } from '../../components/PostIssue';
 // eslint-disable-next-line react/prefer-stateless-function
 class NewsFeed extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   changedIssueId: 0,
-    //   severity: 0,
-    // };
   }
-
-  // onChange = (issueId, ev, val) => {
-  //   // console.log(ev.target);
-  //   // console.log(val);
-  //   // console.log('IN newsfeed ', issueId);
-  //   // this.setState({
-  //   //   changedIssueId: issueId,
-  //   //   severity: val,
-  //   // });
-  //   // issueUpdate.call({ issueId, severity: val });
-  // };
-
-  //   onDragStop = () => {};
 
   render() {
     const { feedIssues } = this.props;
@@ -38,6 +20,10 @@ class NewsFeed extends React.Component {
         <Grid item xs={12} md={3} />
 
         <Grid item xs={12} md={6}>
+          <div>
+            <PostIssue />
+          </div>
+          <Divider />
           <React.Fragment>
             {feedIssues.map(issue => (
               // eslint-disable-next-line no-unused-expressions
@@ -74,7 +60,7 @@ export default withTracker(() => {
     const users = Users.find().fetch();
     const usersReady = usersSub.ready() && !!users;
     */
-
+    
   // issues example
   const issuesSub = Meteor.subscribe('issues.samezip');
   const feedIssues = Issues.find({}, { sort: { createdOn: -1 } }).fetch();
