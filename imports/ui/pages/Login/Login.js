@@ -20,11 +20,7 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillMount() {
-    if (this.props.loggedIn) {
-      return this.props.history.push('/newsfeed');
-    }
-  }
+  componentWillMount() {}
 
   shouldComponentUpdate(nextProps) {
     if (nextProps.loggedIn) {

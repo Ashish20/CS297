@@ -12,6 +12,10 @@ class NewsFeed extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    if (!this.props.loggedIn) this.props.history.push('/login');
+  }
+
   render() {
     const { feedIssues } = this.props;
 
@@ -60,7 +64,7 @@ export default withTracker(() => {
     const users = Users.find().fetch();
     const usersReady = usersSub.ready() && !!users;
     */
-    
+
   // issues example
   const issuesSub = Meteor.subscribe('issues.samezip');
   const feedIssues = Issues.find({}, { sort: { createdOn: -1 } }).fetch();

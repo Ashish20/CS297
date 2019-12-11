@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function AddComment({ issue }) {
+export default function AddComment({ issue, userAvatar }) {
   const classes = useStyles();
   const [comment, setComment] = useState('');
   //   const formRef = useRef(null);
@@ -67,7 +67,10 @@ export default function AddComment({ issue }) {
     >
       <Grid container spacing={2}>
         <Grid item xs={1}>
-          <Avatar className={classes.avatar}>
+          <Avatar
+            src={Meteor.user() && Meteor.user().cloudinaryURL}
+            className={classes.avatar}
+          >
             {Meteor.user() ? Meteor.user().name.substring(0, 1) : ''}
             {/* <img className="avatar" src={proPicPath} /> */}
           </Avatar>
