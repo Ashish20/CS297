@@ -8,6 +8,7 @@ import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import { USER_TYPE } from '../../../constants';
 
 function Comment({ comment, author, propsReady }) {
   return (
@@ -23,7 +24,9 @@ function Comment({ comment, author, propsReady }) {
         <ListItemText
           primary={
             <NavLink to={`/profile/${comment.author.id}`}>
-              {comment.author.name}
+              {author.userType === USER_TYPE.REPRESENTATIVE.id
+                ? comment.author.name + ' - ' + author.designation
+                : comment.author.name}
             </NavLink>
           }
           secondary={

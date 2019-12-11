@@ -85,7 +85,9 @@ function NotificationComponent({ notification }) {
       >
         <ListItemAvatar>
           <NavLink to={`/profile/${notification.actor()._id}`}>
-            <Avatar>{commenter.name.substring(0, 1)}</Avatar>
+            <Avatar src={notification.actor().cloudinaryURL}>
+              {commenter.name.substring(0, 1)}
+            </Avatar>
           </NavLink>
         </ListItemAvatar>
         <ListItemText
